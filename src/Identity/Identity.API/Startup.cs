@@ -55,6 +55,8 @@ namespace Identity.API
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<AppSettings>(Configuration);
+
             services.AddIdentityServer(x =>
             {
                 x.IssuerUri = "https://tedu.com.vn";
