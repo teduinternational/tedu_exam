@@ -14,8 +14,8 @@ namespace Examination.Infrastructure.Repositories
             IMongoClient mongoClient,
             IClientSessionHandle clientSessionHandle,
             IOptions<ExamSettings> settings,
-            IMediator mediator, string collection)
-        : base(mongoClient, clientSessionHandle, settings, mediator, collection)
+            IMediator mediator)
+        : base(mongoClient, clientSessionHandle, settings, mediator, Constants.Collections.Exam)
         {
         }
 

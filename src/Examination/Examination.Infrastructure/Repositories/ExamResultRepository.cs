@@ -9,7 +9,11 @@ namespace Examination.Infrastructure.Repositories
 {
     public class ExamResultRepository : BaseRepository<ExamResult>, IExamResultRepository
     {
-        public ExamResultRepository(IMongoClient mongoClient, IClientSessionHandle clientSessionHandle, IOptions<ExamSettings> settings, IMediator mediator, string collection) : base(mongoClient, clientSessionHandle, settings, mediator, collection)
+        public ExamResultRepository(IMongoClient mongoClient,
+        IClientSessionHandle clientSessionHandle,
+        IOptions<ExamSettings> settings,
+        IMediator mediator)
+        : base(mongoClient, clientSessionHandle, settings, mediator, Constants.Collections.ExamResult)
         {
         }
 
