@@ -13,3 +13,8 @@
 
 ## Packages References
 - https://github.com/serilog/serilog/wiki/Getting-Started
+
+## References URLS
+- https://samwalpole.com/using-scoped-services-inside-singletons
+- https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
+- 
