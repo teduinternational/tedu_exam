@@ -1,6 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
-using Client = Identity.Configuration.IdentityServer.Client;
+using Client = Identity.Admin.Configuration.IdentityServer.Client;
 
 namespace Identity.Admin.Configuration
 {

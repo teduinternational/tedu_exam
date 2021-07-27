@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Identity.EntityFramework.Shared.DbContexts;
 using Identity.EntityFramework.Shared.Entities.Identity;
-using Identity.Helpers;
-using Identity.Middlewares;
+using Identity.Admin.Helpers;
+using Identity.Admin.Middlewares;
 
 namespace Identity.Admin.Configuration.Test
 {

@@ -5,9 +5,9 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Identity.BusinessLogic.Identity.Dtos.Grant;
 using Identity.BusinessLogic.Identity.Services.Interfaces;
-using Identity.ExceptionHandling;
-using Identity.Helpers;
-using Identity.Configuration.Constants;
+using Identity.Admin.ExceptionHandling;
+using Identity.Admin.Helpers;
+using Identity.Admin.Configuration.Constants;
 
 namespace Identity.Admin.Controllers
 {

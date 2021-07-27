@@ -10,8 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Skoruba.AuditLogging.EntityFramework.DbContexts;
 using Skoruba.AuditLogging.EntityFramework.Entities;
-using Identity.Configuration;
-using Identity.Configuration.Interfaces;
+using Identity.Admin.Configuration;
+using Identity.Admin.Configuration.Interfaces;
 using Identity.EntityFramework.Interfaces;
 
 namespace Identity.Admin.Helpers

@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 using Identity.BusinessLogic.Dtos.Configuration;
 using Identity.BusinessLogic.Helpers;
 using Identity.BusinessLogic.Services.Interfaces;
-using Identity.Configuration.Constants;
-using Identity.ExceptionHandling;
+using Identity.Admin.Configuration.Constants;
+using Identity.Admin.ExceptionHandling;
 
 namespace Identity.Admin.Controllers
 {

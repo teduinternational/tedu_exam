@@ -27,24 +27,21 @@ using Skoruba.AuditLogging.EntityFramework.Services;
 using Identity.BusinessLogic.Identity.Dtos.Identity;
 using Identity.BusinessLogic.Services;
 using Identity.BusinessLogic.Services.Interfaces;
-using Identity.ExceptionHandling;
-using Identity.Configuration;
-using Identity.Configuration.ApplicationParts;
-using Identity.Configuration.Constants;
-using Identity.Configuration.Interfaces;
+using Identity.Admin.ExceptionHandling;
+using Identity.Admin.Configuration;
+using Identity.Admin.Configuration.ApplicationParts;
+using Identity.Admin.Configuration.Constants;
+using Identity.Admin.Configuration.Interfaces;
 using Identity.EntityFramework.Interfaces;
 using Identity.EntityFramework.Repositories;
 using Identity.EntityFramework.Repositories.Interfaces;
-using Identity.Helpers.Localization;
+using Identity.Admin.Helpers.Localization;
 using System.Linq;
-using Identity.EntityFramework.MySql.Extensions;
 using Identity.EntityFramework.Shared.Configuration;
 using Identity.EntityFramework.SqlServer.Extensions;
-using Identity.EntityFramework.PostgreSQL.Extensions;
 using Identity.EntityFramework.Helpers;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Identity.Shared.Authentication;
-using Identity.Shared.Configuration.Identity;
 
 namespace Identity.Admin.Helpers
 {
@@ -110,12 +107,6 @@ namespace Identity.Admin.Helpers
             {
                 case DatabaseProviderType.SqlServer:
                     services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, errorLoggingConnectionString, auditLoggingConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, errorLoggingConnectionString, auditLoggingConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, errorLoggingConnectionString, auditLoggingConnectionString, dataProtectionConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");

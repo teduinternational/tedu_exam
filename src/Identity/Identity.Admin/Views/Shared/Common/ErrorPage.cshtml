@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Newtonsoft.Json
-@using Identity.Helpers
+@using Identity.Admin.Helpers
 @inject IViewLocalizer Localizer
 @{
 	ViewData["Title"] = "Error";
@@ -19,6 +19,6 @@
 
 	foreach (NotificationHelpers.Alert notification in obj)
 	{
-				<h2 class="text-danger">@notification.Message</h2>
+		<h2 class="text-danger">@notification.Message</h2>
 	}
 }

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Identity.Configuration.Constants;
-using Identity.ExceptionHandling;
+using Identity.Admin.Configuration.Constants;
+using Identity.Admin.ExceptionHandling;
 
 namespace Identity.Admin.Controllers
 {

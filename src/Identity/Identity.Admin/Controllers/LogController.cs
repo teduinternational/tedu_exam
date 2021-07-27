@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Identity.BusinessLogic.Dtos.Log;
 using Identity.BusinessLogic.Services.Interfaces;
-using Identity.Configuration.Constants;
+using Identity.Admin.Configuration.Constants;
 
 namespace Identity.Admin.Controllers
 {

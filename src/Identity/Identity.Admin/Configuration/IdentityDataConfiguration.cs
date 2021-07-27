@@ -1,4 +1,4 @@
-﻿using Identity.Configuration.Identity;
+﻿using Identity.Admin.Configuration.Identity;
 using System.Collections.Generic;
 
 namespace Identity.Admin.Configuration

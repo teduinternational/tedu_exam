@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Identity.BusinessLogic.Identity.Dtos.Grant
-@using Identity.Helpers
+@using Identity.Admin.Helpers
 @using Identity.BusinessLogic.Shared.Dtos.Common
 @model PersistedGrantsDto
 @inject IViewLocalizer Localizer
@@ -14,7 +14,8 @@
 	<div class="col-12">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a asp-controller="Grant" asp-action="PersistedGrants">@Localizer["NavigationPersistedGrants"]</a></li>
+				<li class="breadcrumb-item"><a asp-controller="Grant"
+						asp-action="PersistedGrants">@Localizer["NavigationPersistedGrants"]</a></li>
 				<li class="breadcrumb-item active" aria-current="page">@Model.SubjectId</li>
 			</ol>
 		</nav>
@@ -27,7 +28,8 @@
 
 <form id="client-form" asp-controller="Grant" asp-action="PersistedGrantsDelete" Method="post">
 
-	<a href="#" class="btn btn-danger mb-3" data-toggle="modal" data-target="#deletePersistedGrantsModal">@Localizer["ButtonDeleteAll"]</a>
+	<a href="#" class="btn btn-danger mb-3" data-toggle="modal"
+		data-target="#deletePersistedGrantsModal">@Localizer["ButtonDeleteAll"]</a>
 
 	<!--Hidden -->
 	<input type="hidden" asp-for="SubjectId" />
@@ -36,21 +38,23 @@
 		<div class="col-12">
 			<table class="table table-striped">
 				<thead>
-                    <tr>
-                        <th></th>
-                        <th>@Localizer["TableSubjectId"]</th>
-                        <th>@Localizer["TableType"]</th>
-                        <th>@Localizer["TableExpiration"]</th>
-                        <th>@Localizer["TableData"]</th>
-                        <th>@Localizer["TableClient"]</th>
-                    </tr>
+					<tr>
+						<th></th>
+						<th>@Localizer["TableSubjectId"]</th>
+						<th>@Localizer["TableType"]</th>
+						<th>@Localizer["TableExpiration"]</th>
+						<th>@Localizer["TableData"]</th>
+						<th>@Localizer["TableClient"]</th>
+					</tr>
 				</thead>
 
 				<tbody>
 					@foreach (var persistedGrant in Model.PersistedGrants)
 					{
 						<tr>
-							<td><a class="btn btn-danger" asp-action="PersistedGrantDelete" asp-route-id="@UrlHelpers.QueryStringSafeHash(persistedGrant.Key)"><span class="oi oi-x"></span></a></td>
+							<td><a class="btn btn-danger" asp-action="PersistedGrantDelete"
+								asp-route-id="@UrlHelpers.QueryStringSafeHash(persistedGrant.Key)"><span
+									class="oi oi-x"></span></a></td>
 							<td>@persistedGrant.SubjectId</td>
 							<td>@persistedGrant.Type</td>
 							<td>@persistedGrant.Expiration</td>
@@ -65,24 +69,28 @@
 
 	<div class="row">
 		<div class="col-12">
-			@await Html.PartialAsync("Common/Pager", new Pager { Action = "PersistedGrant", PageSize = Model.PageSize, TotalCount = Model.TotalCount })
+			@await Html.PartialAsync("Common/Pager", new Pager { Action = "PersistedGrant", PageSize = Model.PageSize,
+			TotalCount = Model.TotalCount })
 		</div>
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="deletePersistedGrantsModal" tabindex="-1" role="dialog" aria-labelledby="deletePersistedGrantsModalLabel">
+	<div class="modal fade" id="deletePersistedGrantsModal" tabindex="-1" role="dialog"
+		aria-labelledby="deletePersistedGrantsModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="deletePersistedGrantsModalLabel">@Localizer["DeleteDialogTitle"]</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
 					@Localizer["DeleteDialogMessage"]
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-danger">@Localizer["DeleteDialogYes"]</button>
-					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">@Localizer["DeleteDialogNo"]</button>
+					<button type="button" class="btn btn-outline-primary"
+						data-dismiss="modal">@Localizer["DeleteDialogNo"]</button>
 				</div>
 			</div>
 		</div>

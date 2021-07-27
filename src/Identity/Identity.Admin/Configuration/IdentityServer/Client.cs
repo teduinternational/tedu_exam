@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Identity.Configuration.Identity;
+using Identity.Admin.Configuration.Identity;
 
 namespace Identity.Admin.Configuration.IdentityServer
 {

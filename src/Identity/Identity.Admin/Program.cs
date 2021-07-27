@@ -9,10 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Identity.Configuration;
+using Identity.Admin.Configuration;
 using Identity.EntityFramework.Shared.DbContexts;
 using Identity.EntityFramework.Shared.Entities.Identity;
-using Identity.Helpers;
+using Identity.Admin.Helpers;
 using Identity.Shared.Configuration.Common;
 using Identity.Shared.Helpers;
 

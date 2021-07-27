@@ -1,4 +1,4 @@
-﻿using Identity.Configuration.Interfaces;
+﻿using Identity.Admin.Configuration.Interfaces;
 
 namespace Identity.Admin.Configuration
 {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Identity.BusinessLogic.Shared.ExceptionHandling;
-using Identity.Helpers;
+using Identity.Admin.Helpers;
 
 namespace Identity.Admin.ExceptionHandling
 {

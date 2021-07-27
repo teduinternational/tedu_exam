@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Identity.Configuration.Constants;
+using Identity.Admin.Configuration.Constants;
 using System.Collections.Generic;
 
 namespace Identity.Admin.Controllers

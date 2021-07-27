@@ -1,5 +1,5 @@
 ﻿@using Newtonsoft.Json
-@using Identity.Helpers
+@using Identity.Admin.Helpers
 @if (ViewBag.Notifications != null)
 {
 	var settings = new JsonSerializerSettings
@@ -14,16 +14,19 @@
 		switch (notification.Type)
 		{
 			case NotificationHelpers.AlertType.Success:
-								<script type="text/javascript">toastr.options.closeButton = true; toastr.success('@notification.Message', '@notification.Title');</script>
+				<script
+	type="text/javascript">toastr.options.closeButton = true; toastr.success('@notification.Message', '@notification.Title');</script>
 				break;
 			case NotificationHelpers.AlertType.Error:
-								<script type="text/javascript">toastr.error('@notification.Message', '@notification.Title');</script>
+				<script type="text/javascript">toastr.error('@notification.Message', '@notification.Title');</script>
 				break;
 			case NotificationHelpers.AlertType.Info:
-								<script type="text/javascript">toastr.options.closeButton = true; toastr.info('@notification.Message', '@notification.Title');</script>
+				<script
+	type="text/javascript">toastr.options.closeButton = true; toastr.info('@notification.Message', '@notification.Title');</script>
 				break;
 			case NotificationHelpers.AlertType.Warning:
-								<script type="text/javascript">toastr.options.closeButton = true; toastr.warning('@notification.Message', '@notification.Title');</script>
+				<script
+	type="text/javascript">toastr.options.closeButton = true; toastr.warning('@notification.Message', '@notification.Title');</script>
 				break;
 		}
 	}

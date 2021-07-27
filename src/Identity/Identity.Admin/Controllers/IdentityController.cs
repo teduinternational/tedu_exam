@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 using Identity.BusinessLogic.Identity.Dtos.Identity;
 using Identity.BusinessLogic.Identity.Services.Interfaces;
 using Identity.BusinessLogic.Shared.Dtos.Common;
-using Identity.Configuration.Constants;
-using Identity.ExceptionHandling;
-using Identity.Helpers.Localization;
+using Identity.Admin.Configuration.Constants;
+using Identity.Admin.ExceptionHandling;
+using Identity.Admin.Helpers.Localization;
 
 namespace Identity.Admin.Controllers
 {
@@ -422,7 +422,7 @@ namespace Identity.Admin.Controllers
             var currentUserId = User.GetSubjectId();
             if (user.Id.ToString() == currentUserId)
             {
-                CreateNotification(Helpers.NotificationHelpers.AlertType.Warning, _localizer["ErrorDeleteUser_CannotSelfDelete"]);
+                CreateNotification(Identity.Admin.Helpers.NotificationHelpers.AlertType.Warning, _localizer["ErrorDeleteUser_CannotSelfDelete"]);
                 return RedirectToAction(nameof(UserDelete), user.Id);
             }
             else
