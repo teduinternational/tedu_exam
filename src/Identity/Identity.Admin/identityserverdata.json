@@ -74,7 +74,7 @@
         "RequirePkce": true,
         "ClientSecrets": [
           {
-            "Value": "admin_client_secret"
+            "Value": "secret"
           }
         ],
         "RedirectUris": ["https://localhost:6003/signin-oidc"],
@@ -86,9 +86,47 @@
         "AllowedScopes": ["openid", "email", "profile", "roles"]
       },
       {
-        "ClientId": "exam_api_swaggerui",
-        "ClientName": "exam_api_swaggerui",
+        "ClientId": "exam_web_app",
+        "ClientName": "Exam Web App Client",
+        "ClientUri": "https://localhost:6001",
         "AllowedGrantTypes": ["authorization_code"],
+        "RequirePkce": true,
+        "ClientSecrets": [
+          {
+            "Value": "secret"
+          }
+        ],
+        "RedirectUris": ["https://localhost:6001/signin-oidc"],
+        "FrontChannelLogoutUri": "https://localhost:6001/signout-oidc",
+        "PostLogoutRedirectUris": [
+          "https://localhost:6001/signout-callback-oidc"
+        ],
+        "AllowedCorsOrigins": ["https://localhost:6001"],
+        "AllowedScopes": ["openid", "email", "profile", "roles"]
+      },
+      {
+        "ClientId": "exam_web_app",
+        "ClientName": "Exam Web App Clientty_admin",
+        "ClientUri": "https://localhost:6002",
+        "AllowedGrantTypes": ["authorization_code"],
+        "RequirePkce": true,
+        "ClientSecrets": [
+          {
+            "Value": "secret"
+          }
+        ],
+        "RedirectUris": ["https://localhost:6002/signin-oidc"],
+        "FrontChannelLogoutUri": "https://localhost:6002/signout-oidc",
+        "PostLogoutRedirectUris": [
+          "https://localhost:6002/signout-callback-oidc"
+        ],
+        "AllowedCorsOrigins": ["https://localhost:6002"],
+        "AllowedScopes": ["openid", "email", "profile", "roles"]
+      },
+      {
+        "ClientId": "exam_api_swaggerui",
+        "ClientName": "Exam API Swagger UI",
+        "AllowedGrantTypes": ["Implicit"],
         "RequireClientSecret": false,
         "RequirePkce": true,
         "RedirectUris": ["https://localhost:5002/swagger/oauth2-redirect.html"],
