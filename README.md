@@ -1,10 +1,11 @@
 # TEDU Exam Project
 
 ## Application URLs:
-- Identity: https://localhost:5001
+- Identity STS: https://localhost:5001
 - Exam API: https://localhost:5002
 - Exam Admin: https://localhost:6001
 - Exam Portal: https://localhost:6002
+- Identity Admin: https://localhost:6003
 
 ## Docker Command Examples
 - docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@123$' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
