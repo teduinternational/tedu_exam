@@ -1,10 +1,11 @@
 # TEDU Exam Project
 
 ## Application URLs:
-- Identity: https://localhost:5001
+- Identity STS: https://localhost:5001
 - Exam API: https://localhost:5002
 - Exam Admin: https://localhost:6001
 - Exam Portal: https://localhost:6002
+- Identity Admin: https://localhost:6003
 
 ## Docker Command Examples
 - docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Admin@123$' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
@@ -16,6 +17,14 @@ curl -L https://raw.githubusercontent.com/IdentityServer/IdentityServer4.Quickst
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IdentityServer/IdentityServer4.Quickstart.UI/main/getmain.ps1'))
 
 
+## Drop database 
+USE master;
+GO
+
+ALTER DATABASE [Identity] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+DROP DATABASE [Identity];
+GO
 
 ## Packages References
 - https://github.com/serilog/serilog/wiki/Getting-Started
