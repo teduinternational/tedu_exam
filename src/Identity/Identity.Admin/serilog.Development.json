@@ -13,14 +13,14 @@
       {
         "Name": "File",
         "Args": {
-          "path": "Logs/identity_sts.txt",
+          "path": "Logs/identity_admin.txt",
           "rollingInterval": "Day"
         }
       },
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "",
+          "connectionString": "Server=.;Database=Identity;User Id=sa;Password=Admin@123$;",
           "tableName": "Log",
           "columnOptionsSection": {
             "addStandardColumns": ["LogEvent"],
