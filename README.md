@@ -29,6 +29,8 @@ GO
 ## Packages References
 - https://github.com/serilog/serilog/wiki/Getting-Started
 - https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
+- https://mudblazor.com/
+- https://github.com/Garderoben/MudBlazor.Templates
 
 ## References URLS
 - https://samwalpole.com/using-scoped-services-inside-singletons
