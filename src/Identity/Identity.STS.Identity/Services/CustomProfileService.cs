@@ -25,8 +25,6 @@ namespace Identity.STS.Identity.Services
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var sub = context.Subject.GetSubjectId();
-
             _logger.LogDebug("Get profile called for subject {subject} from client {client} with claim types {claimTypes} via {caller}",
                 context.Subject.GetSubjectId(),
                 context.Client.ClientName ?? context.Client.ClientId,
@@ -34,11 +32,10 @@ namespace Identity.STS.Identity.Services
                 context.Caller);
 
             var user = await _userManager.FindByIdAsync(context.Subject.GetSubjectId());
-
+            var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>
             {
-                new Claim("role", "dataEventRecords.admin"),
-                new Claim("role", "dataEventRecords.user"),
+                new Claim("role", string.Join(";",roles)),
                 new Claim("username", user.UserName),
                 new Claim("email", user.Email)
             };

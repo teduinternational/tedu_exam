@@ -13,12 +13,16 @@
     <MudText>
         Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink>
     </MudText>
+    @if (!string.IsNullOrEmpty(errorMsg))
+    {
+        <MudText Color="@Color.Error">@errorMsg</MudText>
+    }
 
-    <MudTextField T="string" Value="@("admin")" Label="User name" Variant="Variant.Outlined" Class="my-6">
+    <MudTextField T="string" @bind-Value="model.UserName" Label="User name" Variant="Variant.Outlined" Class="my-6">
     </MudTextField>
 
-    <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput"
-        Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+    <MudTextField @bind-Value="@model.Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput"
+                  Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
 
     <div Class="d-flex justify-space-between align-center">
         <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
@@ -30,10 +34,8 @@
 </EditForm>
 @code {
     LoginRequest model = new LoginRequest();
-    string Password { get; set; } = "Admin@123$";
-    bool success;
-    string[] errors = { };
-    MudForm form;
+    string errorMsg = string.Empty;
+
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -43,7 +45,11 @@
         var result = await AuthService.Login(model);
         if (result.IsError == false)
         {
-            NavigationManager.NavigateTo("/dashboars");
+            NavigationManager.NavigateTo("/personal/dashboard");
+        }
+        else
+        {
+            errorMsg = "Incorrect username or password";
         }
     }
 

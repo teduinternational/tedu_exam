@@ -1,4 +1,7 @@
 @inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
 
 
 <MudThemeProvider Theme="_themeManager.Theme" />
@@ -12,7 +15,7 @@
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
             <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                OnClick="@((e) => DrawerToggle())" />
+                           OnClick="@((e) => DrawerToggle())" />
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.Xs">
             <MudText Typo="Typo.h6" Class="ml-4">Admin Dashboard</MudText>
@@ -22,13 +25,13 @@
         </MudHidden>
         <MudSpacer />
         <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom"
-            OffsetY="true" Dense="true">
+                 OffsetY="true" Dense="true">
             <MudMenuItem>English</MudMenuItem>
             <MudMenuItem>Swedish</MudMenuItem>
             <MudMenuItem>Old Norse</MudMenuItem>
         </MudMenu>
         <MudMenu Icon="@Icons.Material.Outlined.Widgets" Color="Color.Inherit" Direction="Direction.Bottom"
-            OffsetY="true" Dense="true">
+                 OffsetY="true" Dense="true">
             <MudMenuItem Link="https://mudblazor.com/">MudBlazor</MudMenuItem>
             <MudMenuItem Link="https://github.com/Garderoben/MudBlazor.Templates">Source Code</MudMenuItem>
         </MudMenu>
@@ -45,20 +48,21 @@
         </MudMenu>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="_themeManager.DrawerElevation"
-        ClipMode="_themeManager.DrawerClipMode">
+               ClipMode="_themeManager.DrawerClipMode">
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
             <MudToolBar DisableGutters="true">
                 <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit"
-                    OnClick="@((e) => DrawerToggle())" Class="ml-3" />
+                               OnClick="@((e) => DrawerToggle())" Class="ml-3" />
                 <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
                 <MudSpacer />
-                <MudButton Variant="Variant.Text" Link="https://mudblazor.com/" Style="color:#594AE2;">MudBlazor
+                <MudButton Variant="Variant.Text" Link="https://mudblazor.com/" Style="color:#594AE2;">
+                    MudBlazor
                 </MudButton>
                 <MudButton Variant="Variant.Text" Link="https://github.com/Garderoben/MudBlazor.Templates"
-                    Style="color:#424242;" Class="mr-3">Source Code</MudButton>
+                           Style="color:#424242;" Class="mr-3">Source Code</MudButton>
             </MudToolBar>
         </MudHidden>
         <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
@@ -69,7 +73,7 @@
 
 <MudThemeManagerButton OnClick="@((e) => OpenThemeManager(true))" />
 <MudThemeManager Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="_themeManager"
-    ThemeChanged="UpdateTheme" />
+                 ThemeChanged="UpdateTheme" />
 
 
 @code {
@@ -93,9 +97,17 @@
         _themeManager = value;
         StateHasChanged();
     }
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        // https://docs.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-5.0
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo($"{UrlConstants.Login}?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}");
+        }
+
         _themeManager.Theme = new MudBlazorAdminDashboard();
         _themeManager.DrawerClipMode = DrawerClipMode.Always;
         _themeManager.FontFamily = "Montserrat";
