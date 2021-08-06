@@ -79,6 +79,9 @@ GO
     "PersistedGrantDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
     "IdentityDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
     "DataProtectionDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "AdminConfiguration": {
+    "IdentityAdminBaseUrl": "https://localhost:6003",
   }
 }
 

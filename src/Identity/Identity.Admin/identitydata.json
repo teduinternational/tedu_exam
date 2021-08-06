@@ -15,6 +15,14 @@
           {
             "Type": "name",
             "Value": "admin"
+          },
+          {
+            "Type": "given_name",
+            "Value": "Toan"
+          },
+          {
+            "Type": "family_name",
+            "Value": "Bach"
           }
         ]
       }
