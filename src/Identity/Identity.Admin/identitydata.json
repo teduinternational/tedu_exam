@@ -8,6 +8,8 @@
     "Users": [
       {
         "Username": "admin",
+        "FirstName": "Toan",
+        "LastName": "Bach",
         "Password": "Admin@123$",
         "Email": "admin@tedu.com.vn",
         "Roles": ["Administrator"],
@@ -15,6 +17,14 @@
           {
             "Type": "name",
             "Value": "admin"
+          },
+          {
+            "Type": "first_name",
+            "Value": "Toan"
+          },
+          {
+            "Type": "last_name",
+            "Value": "Bach"
           }
         ]
       }
