@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Examination.Dtos;
+using Examination.Dtos.Exams;
 using MediatR;
 
 namespace Examination.Application.Queries.GetHomeExamList

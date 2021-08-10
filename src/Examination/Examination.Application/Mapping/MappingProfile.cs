@@ -1,6 +1,6 @@
 using AutoMapper;
 using Examination.Domain.AggregateModels.ExamAggregate;
-using Examination.Dtos;
+using Examination.Dtos.Exams;
 
 namespace Examination.Application.Mapping
 {

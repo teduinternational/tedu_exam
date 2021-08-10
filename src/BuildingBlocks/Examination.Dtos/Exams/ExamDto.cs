@@ -1,6 +1,6 @@
 using System;
 
-namespace Examination.Dtos
+namespace Examination.Dtos.Exams
 {
     public class ExamDto
     {
