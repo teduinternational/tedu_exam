@@ -25,10 +25,15 @@
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleLogin" Size="Size.Large" FullWidth="true">Sign In</MudButton>
 </EditForm>
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
 @code {
+    private bool loading = false;
 
     LoginRequest model = new LoginRequest();
     string errorMsg = string.Empty;
+
 
     string Password { get; set; } = "BMWvBPJXZu";
 
@@ -38,6 +43,7 @@
 
     async Task HandleLogin()
     {
+        loading = true;
         var result = await AuthService.Login(model);
         if (result.IsError == false)
         {
@@ -47,6 +53,7 @@
         {
             errorMsg = "Incorrect username or password";
         }
+        loading = false;
     }
 
     void TogglePasswordVisibility()
