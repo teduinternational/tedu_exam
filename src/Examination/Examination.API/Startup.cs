@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Examination.API.Filters;
 using Examination.Application.Commands.StartExam;
 using Examination.Application.Mapping;
+using Examination.Domain.AggregateModels.CategoryAggregate;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Domain.AggregateModels.ExamResultAggregate;
 using Examination.Domain.AggregateModels.UserAggregate;
@@ -151,6 +152,7 @@ namespace Examination.API
             services.AddTransient<IExamRepository, ExamRepository>();
             services.AddTransient<IExamResultRepository, ExamResultRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
         }
 

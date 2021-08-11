@@ -1,0 +1,77 @@
+﻿@page "/app/categories/details/{Id}"
+@using Examination.Dtos.Categories
+@using Microsoft.Extensions.Logging
+@inject ICategoryService CategoryService
+@inject ILogger<ItemDetails> Logger
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager;
+
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">@model.Name</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="6">
+        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <MudCard Elevation="25" Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Please fill fully information</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-5">
+                    <DataAnnotationsValidator />
+                    <MudTextField Label="Name" HelperText="Example: C# Programming"
+                                  @bind-Value="model.Name" For="@(() => model.Name)" />
+
+                    <MudTextField Label="URL Path" HelperText="Example: csharp-programming"
+                                  @bind-Value="model.UrlPath" For="@(() => model.UrlPath)" />
+
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save</MudButton>
+                </MudCardActions>
+
+            </MudCard>
+        </EditForm>
+    </MudItem>
+</MudGrid>
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
+@code {
+    bool success;
+    bool loading = false;
+    [Parameter]
+    public string Id { set; get; }
+    UpdateCategoryRequest model = new UpdateCategoryRequest();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItemDetails(Id);
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        loading = true;
+        success = await CategoryService.UpdateAsync(model);
+        if (success)
+        {
+            Snackbar.Add("Update item success", Severity.Success);
+            NavigationManager.NavigateTo(UrlConstants.Categories);
+        }
+        else
+        {
+            Snackbar.Add("Create action is not success", Severity.Error);
+        }
+        loading = false;
+        StateHasChanged();
+    }
+    private async Task LoadItemDetails(string id)
+    {
+        loading = true;
+        var item = await CategoryService.GetCategoryByIdAsync(Id);
+        model.Id = item.Id;
+        model.Name = item.Name;
+        model.UrlPath = item.UrlPath;
+        loading = false;
+    }
+
+}
