@@ -5,8 +5,9 @@ using System.Net.Mime;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Examination.API.Filters;
-using Examination.Application.Commands.StartExam;
+using Examination.Application.Commands.V1.Exams.StartExam;
 using Examination.Application.Mapping;
+using Examination.Domain.AggregateModels.CategoryAggregate;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Domain.AggregateModels.ExamResultAggregate;
 using Examination.Domain.AggregateModels.UserAggregate;
@@ -151,7 +152,7 @@ namespace Examination.API
             services.AddTransient<IExamRepository, ExamRepository>();
             services.AddTransient<IExamResultRepository, ExamResultRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
-
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

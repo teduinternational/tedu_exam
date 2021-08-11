@@ -1,0 +1,129 @@
+﻿@page "/app/categories"
+@using Examination.Dtos.Categories
+@inject ICategoryService CategoryService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Category</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudCard Elevation="25" Style="height:100%;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Link="/app/categories/new" Color="Color.Primary">Create</MudButton>
+
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0">
+                <MudGrid>
+                    <MudItem xs="12" md="12">
+                        <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
+                            <HeaderContent>
+                                <MudTh>Name</MudTh>
+                                <MudTh>URL</MudTh>
+                                <MudTh>Action</MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd DataLabel="Name">@context.Name</MudTd>
+                                <MudTd DataLabel="URL">@context.UrlPath</MudTd>
+                                <MudTd>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+
+                                </MudTd>
+                            </RowTemplate>
+
+                            <PagerContent>
+                                <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
+                            </PagerContent>
+                        </MudTable>
+                    </MudItem>
+                </MudGrid>
+
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
+
+@code{
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [CascadingParameter]
+    private Error Error { set; get; }
+
+    public bool loading = false;
+
+    private string DeleteId { set; get; }
+    private List<CategoryDto> Elements = new List<CategoryDto>();
+    public MetaData MetaData { get; set; } = new MetaData();
+
+    private CategorySearch TaskListSearch = new CategorySearch();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetTasks();
+    }
+
+    public async Task SearchData(CategorySearch taskListSearch)
+    {
+        TaskListSearch = taskListSearch;
+        await GetTasks();
+    }
+
+    public async Task OnDeleteTask(string deleteId)
+    {
+        DeleteId = deleteId;
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<ConfirmationDialog>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await CategoryService.DeleteAsync(DeleteId);
+            await GetTasks();
+        }
+    }
+
+    private async Task GetTasks()
+    {
+        loading = true;
+        try
+        {
+            var pagingResponse = await CategoryService.GetCategoriesPagingAsync(TaskListSearch);
+            Elements = pagingResponse.Items;
+            MetaData = pagingResponse.MetaData;
+            loading = false;
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+            loading = false;
+        }
+
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        TaskListSearch.PageNumber = page;
+        await GetTasks();
+    }
+
+    private void NavigateToEdit(string id)
+    {
+        NavigationManager.NavigateTo($"/app/categories/details/{id}");
+    }
+}
