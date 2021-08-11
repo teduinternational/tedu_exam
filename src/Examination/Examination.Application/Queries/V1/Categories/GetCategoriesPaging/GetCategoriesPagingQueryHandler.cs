@@ -42,16 +42,7 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
             var items = _mapper.Map<List<CategoryDto>>(result.Item1);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            return new PagedList<CategoryDto>()
-            {
-                Items = items,
-                MetaData = new MetaData()
-                {
-                    CurrentPage = request.PageIndex,
-                    PageSize = request.PageSize,
-                    TotalCount = result.Item2,
-                }
-            };
+            return new PagedList<CategoryDto>(items, result.Item2, request.PageIndex, request.PageSize);
         }
     }
 }

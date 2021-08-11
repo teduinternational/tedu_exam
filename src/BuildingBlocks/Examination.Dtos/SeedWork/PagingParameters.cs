@@ -10,7 +10,7 @@ namespace Examination.Dtos.SeedWork
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;
-        private int _pageSize = 20;
+        private int _pageSize = 2;
         public int PageSize
         {
             get

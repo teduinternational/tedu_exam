@@ -19,13 +19,11 @@
                     <MudItem xs="12" md="12">
                         <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
                             <HeaderContent>
-                                <MudTh>Id</MudTh>
                                 <MudTh>Name</MudTh>
                                 <MudTh>URL</MudTh>
                                 <MudTh>Action</MudTh>
                             </HeaderContent>
                             <RowTemplate>
-                                <MudTd DataLabel="Id">@context.Id</MudTd>
                                 <MudTd DataLabel="Name">@context.Name</MudTd>
                                 <MudTd DataLabel="URL">@context.UrlPath</MudTd>
                                 <MudTd>
@@ -36,7 +34,7 @@
                             </RowTemplate>
 
                             <PagerContent>
-                                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage"></Pagination>
+                                <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
                             </PagerContent>
                         </MudTable>
                     </MudItem>
