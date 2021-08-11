@@ -5,8 +5,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Examination.Infrastructure.Repositories
@@ -22,7 +20,19 @@ namespace Examination.Infrastructure.Repositories
         {
         }
 
-        public async Task<Tuple<List<Category>, long>> GetCategoryListPaging(string searchKeyword, int pageIndex, int pageSize)
+        public async Task<Category> GetCategoriesByIdAsync(string id)
+        {
+            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq(s => s.Id, id);
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task<Category> GetCategoriesByNameAsync(string name)
+        {
+            FilterDefinition<Category> filter = Builders<Category>.Filter.Eq(s => s.Name, name);
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task<Tuple<List<Category>, long>> GetCategoriesPagingAsync(string searchKeyword, int pageIndex, int pageSize)
         {
             FilterDefinition<Category> filter = Builders<Category>.Filter.Empty;
             if (!string.IsNullOrEmpty(searchKeyword))

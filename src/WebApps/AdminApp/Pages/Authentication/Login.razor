@@ -1,5 +1,5 @@
 ﻿@page "/"
-@page "/pages/authentication/login"
+@page "/auth/login"
 @layout LoginLayout
 @inject NavigationManager NavigationManager;
 @inject IAuthService AuthService;
@@ -8,7 +8,7 @@
 
     <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
 
-    <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
+    <MudText>Don't have an account? <MudLink Href="/auth/register">Sign Up</MudLink></MudText>
     @if (!string.IsNullOrEmpty(errorMsg))
     {
         <MudText Color="@Color.Error">@errorMsg</MudText>
@@ -19,7 +19,7 @@
 
     <div Class="d-flex justify-space-between align-center">
         <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
-        <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
+        <MudLink Href="/auth/forgot-password">Forgot pwd?</MudLink>
     </div>
 
 
@@ -44,7 +44,7 @@
     async Task HandleLogin()
     {
         loading = true;
-        var result = await AuthService.Login(model);
+        var result = await AuthService.LoginAsync(model);
         if (result.IsError == false)
         {
             NavigationManager.NavigateTo("/personal/dashboard");

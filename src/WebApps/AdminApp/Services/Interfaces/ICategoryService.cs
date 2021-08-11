@@ -6,10 +6,10 @@ namespace AdminApp.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<PagedList<CategoryDto>> GetListPaging(CategorySearch taskListSearch);
-        Task<CategoryDto> GetDetail(string id);
-        Task<bool> Create(CategoryRequest request);
-        Task<bool> Update(string id, CategoryRequest request);
-        Task<bool> Delete(string id);
+        Task<PagedList<CategoryDto>> GetCategoriesPagingAsync(CategorySearch taskListSearch);
+        Task<CategoryDto> GetCategoryByIdAsync(string id);
+        Task<bool> CreateAsync(CreateCategoryRequest request);
+        Task<bool> UpdateAsync(UpdateCategoryRequest request);
+        Task<bool> DeleteAsync(string id);
     }
 }

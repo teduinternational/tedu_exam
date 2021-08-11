@@ -1,49 +1,56 @@
-﻿@page "/pages/applications/categories"
+﻿@page "/app/categories"
 @using Examination.Dtos.Categories
 @inject ICategoryService CategoryService
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Category</MudText>
-    <MudGrid>
-        <MudItem xs="12" sm="12" md="12">
-            <MudCard Elevation="25" Style="height:100%;">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.h6">Category list</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent Class="px-0">
-                    <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
-                        <HeaderContent>
-                            <MudTh>Id</MudTh>
-                            <MudTh>Name</MudTh>
-                            <MudTh>URL</MudTh>
-                            <MudTh>Action</MudTh>
-                        </HeaderContent>
-                        <RowTemplate>
-                            <MudTd DataLabel="Id">@context.Id</MudTd>
-                            <MudTd DataLabel="Name">@context.Name</MudTd>
-                            <MudTd DataLabel="URL">@context.UrlPath</MudTd>
-                            <MudTd>
-                                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Category</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudCard Elevation="25" Style="height:100%;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Link="/app/categories/new" Color="Color.Primary">Create</MudButton>
 
-                            </MudTd>
-                        </RowTemplate>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0">
+                <MudGrid>
+                    <MudItem xs="12" md="12">
+                        <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
+                            <HeaderContent>
+                                <MudTh>Id</MudTh>
+                                <MudTh>Name</MudTh>
+                                <MudTh>URL</MudTh>
+                                <MudTh>Action</MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd DataLabel="Id">@context.Id</MudTd>
+                                <MudTd DataLabel="Name">@context.Name</MudTd>
+                                <MudTd DataLabel="URL">@context.UrlPath</MudTd>
+                                <MudTd>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
 
-                        <PagerContent>
-                            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage"></Pagination>
-                        </PagerContent>
-                    </MudTable>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
+                                </MudTd>
+                            </RowTemplate>
 
-    <MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
-        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
-    </MudOverlay>
+                            <PagerContent>
+                                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage"></Pagination>
+                            </PagerContent>
+                        </MudTable>
+                    </MudItem>
+                </MudGrid>
+
+               
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
 
 @code{
 
@@ -88,7 +95,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            await CategoryService.Delete(DeleteId);
+            await CategoryService.DeleteAsync(DeleteId);
             await GetTasks();
         }
     }
@@ -98,7 +105,7 @@
         loading = true;
         try
         {
-            var pagingResponse = await CategoryService.GetListPaging(TaskListSearch);
+            var pagingResponse = await CategoryService.GetCategoriesPagingAsync(TaskListSearch);
             Elements = pagingResponse.Items;
             MetaData = pagingResponse.MetaData;
             loading = false;
@@ -119,6 +126,6 @@
 
     private void NavigateToEdit(string id)
     {
-        NavigationManager.NavigateTo($"/pages/applications/categories/{id}");
+        NavigationManager.NavigateTo($"/app/categories/details/{id}");
     }
 }

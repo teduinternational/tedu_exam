@@ -10,20 +10,20 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Examination.Application.Queries.V1.Categories.GetCategoryList
+namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
 {
-    public class GetCategoryListPagingQueryHandler : IRequestHandler<GetCategoryListPagingQuery, PagedList<CategoryDto>>
+    public class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery, PagedList<CategoryDto>>
     {
 
         private readonly ICategoryRepository _categoryRepository;
         private readonly IClientSessionHandle _clientSessionHandle;
         private readonly IMapper _mapper;
-        private readonly ILogger<GetCategoryListPagingQueryHandler> _logger;
+        private readonly ILogger<GetCategoriesPagingQueryHandler> _logger;
 
-        public GetCategoryListPagingQueryHandler(
+        public GetCategoriesPagingQueryHandler(
                 ICategoryRepository categoryRepository,
                 IMapper mapper,
-                ILogger<GetCategoryListPagingQueryHandler> logger,
+                ILogger<GetCategoriesPagingQueryHandler> logger,
                 IClientSessionHandle clientSessionHandle
             )
         {
@@ -34,11 +34,11 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoryList
 
         }
 
-        public async Task<PagedList<CategoryDto>> Handle(GetCategoryListPagingQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<CategoryDto>> Handle(GetCategoriesPagingQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
-            var result = await _categoryRepository.GetCategoryListPaging(request.SearchKeyword, request.PageIndex, request.PageSize);
+            var result = await _categoryRepository.GetCategoriesPagingAsync(request.SearchKeyword, request.PageIndex, request.PageSize);
             var items = _mapper.Map<List<CategoryDto>>(result.Item1);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
