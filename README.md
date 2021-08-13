@@ -86,6 +86,22 @@ GO
   }
 }
 
+# Admin API
+{
+  "ConnectionStrings": {
+    "ConfigurationDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "PersistedGrantDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "IdentityDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "AdminLogDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "AdminAuditLogDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "DataProtectionDbConnection": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "AdminApiConfiguration": {
+    "ApiBaseUrl": "https://localhost:5003",
+    "IdentityServerBaseUrl": "https://localhost:5001",
+  }
+}
+
 ## References URLS
 - https://samwalpole.com/using-scoped-services-inside-singletons
 - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
