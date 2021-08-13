@@ -1,0 +1,31 @@
+﻿{
+  "IdentityData": {
+    "Roles": [
+      {
+        "Name": "Administrator"
+      }
+    ],
+    "Users": [
+      {
+        "Username": "admin",
+        "Password": "Admin@123$",
+        "Email": "admin@tedu.com.vn",
+        "Roles": [ "Administrator" ],
+        "Claims": [
+          {
+            "Type": "name",
+            "Value": "admin"
+          },
+          {
+            "Type": "given_name",
+            "Value": "Toan"
+          },
+          {
+            "Type": "family_name",
+            "Value": "Bach"
+          }
+        ]
+      }
+    ]
+  }
+}
