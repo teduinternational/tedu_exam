@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Examination.Application.Queries.GetHomeExamList;
+using Examination.Application.Queries.V1.Exams.GetHomeExamList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,10 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Examination.API.Controllers.V1
 {
 
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [ApiVersion("1.0")]
-    public class ExamsController : ControllerBase
+    public class ExamsController : BaseController
     {
         private readonly IMediator _mediator;
         private readonly ILogger<ExamsController> _logger;

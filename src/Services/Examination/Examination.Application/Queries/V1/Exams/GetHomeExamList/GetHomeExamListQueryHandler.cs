@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Examination.Application.Queries.GetHomeExamList;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Dtos.Exams;
 using MediatR;

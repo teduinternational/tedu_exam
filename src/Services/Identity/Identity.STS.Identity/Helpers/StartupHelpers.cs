@@ -30,6 +30,7 @@ using Identity.Admin.EntityFramework.Configuration.PostgreSQL;
 using Identity.Admin.EntityFramework.Configuration.SqlServer;
 using Identity.Shared.Configuration.Authentication;
 using Identity.Shared.Configuration.Configuration.Identity;
+using Identity.STS.Identity.Services;
 
 namespace Identity.STS.Identity.Helpers
 {
@@ -346,7 +347,7 @@ namespace Identity.STS.Identity.Helpers
             builder.AddCustomSigningCredential(configuration);
             builder.AddCustomValidationKey(configuration);
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
-
+            builder.AddCustomUserStore();
             return builder;
         }
 
