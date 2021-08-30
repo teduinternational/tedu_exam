@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Examination.Domain.SeedWork;
-using Examination.Dtos.Enums;
+using Examination.Shared.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Examination.Domain.AggregateModels.QuestionAggregate
@@ -33,6 +33,9 @@ namespace Examination.Domain.AggregateModels.QuestionAggregate
 
         [BsonElement("categoryId")]
         public string CategoryId { get; set; }
+
+        [BsonElement("categoryName")]
+        public string CategoryName { get; set; }
 
         [BsonElement("answers")]
         public IEnumerable<Answer> Answers { set; get; }

@@ -1,0 +1,77 @@
+﻿@page "/app/questions/details/{Id}"
+@using Examination.Shared.Questions
+@using Microsoft.Extensions.Logging
+@inject IQuestionService QuestionService
+@inject ILogger<ItemDetails> Logger
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager;
+
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">@model.Content</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="6">
+        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <MudCard Elevation="25" Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Please fill fully information</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-5">
+                    <DataAnnotationsValidator />
+                    <MudTextField Label="Name" HelperText="Example: C# Programming"
+                                  @bind-Value="model.Content" For="@(() => model.Content)" />
+
+                    <MudTextField Label="URL Path" HelperText="Example: csharp-programming"
+                                  @bind-Value="model.Explain" For="@(() => model.Explain)" />
+
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save</MudButton>
+                </MudCardActions>
+
+            </MudCard>
+        </EditForm>
+    </MudItem>
+</MudGrid>
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
+@code {
+    bool success;
+    bool loading = false;
+    [Parameter]
+    public string Id { set; get; }
+    UpdateQuestionRequest model = new UpdateQuestionRequest();
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItemDetails(Id);
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        loading = true;
+        success = await QuestionService.UpdateAsync(model);
+        if (success)
+        {
+            Snackbar.Add("Update item success", Severity.Success);
+            NavigationManager.NavigateTo(UrlConstants.Categories);
+        }
+        else
+        {
+            Snackbar.Add("Create action is not success", Severity.Error);
+        }
+        loading = false;
+        StateHasChanged();
+    }
+    private async Task LoadItemDetails(string id)
+    {
+        loading = true;
+        var item = await QuestionService.GetQuestionByIdAsync(Id);
+        model.Id = item.Id;
+        model.Content = item.Content;
+        model.Explain = item.Explain;
+        loading = false;
+    }
+
+}

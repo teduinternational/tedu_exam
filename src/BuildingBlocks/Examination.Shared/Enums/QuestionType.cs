@@ -1,4 +1,4 @@
-namespace Examination.Dtos.Enums
+namespace Examination.Shared.Enums
 {
     public enum QuestionType
     {

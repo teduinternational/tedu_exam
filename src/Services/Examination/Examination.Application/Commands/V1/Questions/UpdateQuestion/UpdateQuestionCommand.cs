@@ -1,4 +1,4 @@
-﻿using Examination.Dtos.Enums;
+﻿using Examination.Shared.Enums;
 using Examination.Shared.Questions;
 using MediatR;
 using System.Collections.Generic;

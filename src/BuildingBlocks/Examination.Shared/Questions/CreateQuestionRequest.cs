@@ -1,4 +1,4 @@
-﻿using Examination.Dtos.Enums;
+﻿using Examination.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
