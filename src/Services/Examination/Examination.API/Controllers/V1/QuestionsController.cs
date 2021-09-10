@@ -5,6 +5,7 @@ using Examination.Application.Queries.V1.Questions.GetQuestionById;
 using Examination.Application.Queries.V1.Questions.GetQuestionsPaging;
 using Examination.Dtos.SeedWork;
 using Examination.Shared.Questions;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,36 +19,37 @@ namespace Examination.API.Controllers.V1
         private readonly IMediator _mediator;
         private readonly ILogger<QuestionsController> _logger;
 
-        public QuestionsController(IMediator mediator, ILogger<QuestionsController> logger)
+        public QuestionsController(IMediator mediator, 
+            ILogger<QuestionsController> logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(PagedList<QuestionDto>), (int)HttpStatusCode.OK)]
+        [HttpGet("paging")]
+        [ProducesResponseType(typeof(ApiSuccessResult<PagedList<QuestionDto>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsPagingAsync([FromQuery] GetQuestionsPagingQuery query)
         {
             _logger.LogInformation("BEGIN: GetQuestionsPagingAsync");
 
-            var queryResult = await _mediator.Send(query);
+            var result = await _mediator.Send(query);
 
             _logger.LogInformation("END: GetQuestionsPagingAsync");
 
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(QuestionDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiSuccessResult<QuestionDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetQuestionsByIdAsync(string id)
         {
             _logger.LogInformation("BEGIN: GetQuestionsByIdAsync");
 
-            var queryResult = await _mediator.Send(new GetQuestionByIdQuery(id));
+            var result = await _mediator.Send(new GetQuestionByIdQuery(id));
 
             _logger.LogInformation("END: GetQuestionsByIdAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -56,7 +58,7 @@ namespace Examination.API.Controllers.V1
         public async Task<IActionResult> UpdateQuestionAsync([FromBody] UpdateQuestionRequest request)
         {
             _logger.LogInformation("BEGIN: UpdateQuestionAsync");
-            var queryResult = await _mediator.Send(new UpdateQuestionCommand()
+            var result = await _mediator.Send(new UpdateQuestionCommand()
             {
                 Id = request.Id,
                 Content = request.Content,
@@ -68,7 +70,7 @@ namespace Examination.API.Controllers.V1
             });
 
             _logger.LogInformation("END: UpdateQuestionAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -78,7 +80,7 @@ namespace Examination.API.Controllers.V1
         {
             _logger.LogInformation("BEGIN: CreateQuestionAsync");
 
-            var queryResult = await _mediator.Send(new CreateQuestionCommand()
+            var result = await _mediator.Send(new CreateQuestionCommand()
             {
                 Content = request.Content,
                 QuestionType = request.QuestionType,
@@ -87,11 +89,9 @@ namespace Examination.API.Controllers.V1
                 Answers = request.Answers,
                 Explain = request.Explain
             });
-            if (queryResult == null)
-                return BadRequest();
 
             _logger.LogInformation("END: CreateQuestionAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -99,12 +99,12 @@ namespace Examination.API.Controllers.V1
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteQuestionAsync(string id)
         {
-            _logger.LogInformation("BEGIN: GetExamList");
+            _logger.LogInformation("BEGIN: DeleteQuestionAsync");
 
-            var queryResult = await _mediator.Send(new DeleteQuestionCommand(id));
+            var result = await _mediator.Send(new DeleteQuestionCommand(id));
 
-            _logger.LogInformation("END: GetExamList");
-            return Ok(queryResult);
+            _logger.LogInformation("END: DeleteQuestionAsync");
+            return Ok(result);
         }
     }
 }

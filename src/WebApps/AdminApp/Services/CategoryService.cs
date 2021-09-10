@@ -1,5 +1,6 @@
-﻿using Examination.Dtos.Categories;
-using Examination.Dtos.SeedWork;
+﻿using Examination.Dtos.SeedWork;
+using Examination.Shared.Categories;
+using Examination.Shared.SeedWork;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -31,8 +32,8 @@ namespace AdminApp.Services.Interfaces
 
         public async Task<CategoryDto> GetCategoryByIdAsync(string id)
         {
-            var result = await _httpClient.GetFromJsonAsync<CategoryDto>($"/api/v1/categories/{id}");
-            return result;
+            var result = await _httpClient.GetFromJsonAsync<ApiSuccessResult<CategoryDto>>($"/api/v1/categories/{id}");
+            return result.ResultObj;
         }
 
         public async Task<PagedList<CategoryDto>> GetCategoriesPagingAsync(CategorySearch searchInput)
@@ -47,16 +48,22 @@ namespace AdminApp.Services.Interfaces
                 queryStringParam.Add("searchKeyword", searchInput.Name);
 
 
-            string url = QueryHelpers.AddQueryString("/api/v1/categories", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/v1/categories/paging", queryStringParam);
 
-            var result = await _httpClient.GetFromJsonAsync<PagedList<CategoryDto>>(url);
-            return result;
+            var result = await _httpClient.GetFromJsonAsync<ApiSuccessResult<PagedList<CategoryDto>>>(url);
+            return result.ResultObj;
         }
 
         public async Task<bool> UpdateAsync(UpdateCategoryRequest request)
         {
             var result = await _httpClient.PutAsJsonAsync($"/api/v1/categories", request);
             return result.IsSuccessStatusCode;
+        }
+
+        public async Task<List<CategoryDto>> GetAllCategoriesAsync()
+        {
+            var result = await _httpClient.GetFromJsonAsync<ApiSuccessResult<List<CategoryDto>>>($"/api/v1/categories");
+            return result.ResultObj;
         }
     }
 }

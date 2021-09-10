@@ -1,0 +1,45 @@
+﻿@using Examination.Shared.Questions
+@inject ISnackbar Snackbar
+@if (ShowDialog)
+{
+    <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+        <MudDialog>
+            <TitleContent>
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Class="mr-3 mb-n1" />
+                    Add answer
+                </MudText>
+            </TitleContent>
+            <DialogContent>
+
+                <DataAnnotationsValidator />
+                <MudTextField Label="Name" Required="true" RequiredError="Content is required"
+                              @bind-Value="Model.Content" For="@(() => Model.Content)" />
+                <MudCheckBox @bind-Checked="@Model.IsCorrect">Correct</MudCheckBox>
+
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="Cancel">Cancel</MudButton>
+                <MudButton Color="Color.Error" ButtonType="ButtonType.Submit">Save</MudButton>
+            </DialogActions>
+        </MudDialog>
+    </EditForm>
+}
+
+@code {
+    protected bool ShowDialog { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public AnswerDto Model { get; set; } = new AnswerDto();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void OnValidSubmit()
+    {
+        Snackbar.Add("Answer added", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(Model));
+    }
+}
