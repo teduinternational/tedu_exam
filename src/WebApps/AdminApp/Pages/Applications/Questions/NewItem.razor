@@ -11,70 +11,70 @@
 @inject IDialogService DialogService
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Create Question</MudText>
-<MudGrid>
-    <EditForm Model="model" OnValidSubmit="OnValidSubmit">
-        <MudItem xs="12" sm="12" md="6">
-            <MudCard Elevation="25" Style="height:100%;">
-                <MudCardContent Class="px-5">
-                    <DataAnnotationsValidator />
-                    <MudTextField Label="Content" Required="true" RequiredError="Content is required"
-                                  @bind-Value="model.Content" For="@(() => model.Content)" />
 
-                    <MudRadioGroup @bind-SelectedOption="model.Level" Required="true" RequiredError="Level is required">
-                        <MudRadio Option="@(nameof(Level.Easy))" Color="Color.Primary">Easy</MudRadio>
-                        <MudRadio Option="@(nameof(Level.Medium))" Color="Color.Warning">Medium</MudRadio>
-                        <MudRadio Option="@(nameof(Level.Difficult))" Color="Color.Error">Difficult</MudRadio>
+<EditForm Model="model" OnValidSubmit="OnValidSubmit">
+    <MudPaper>
+        <MudGrid Style="margin:0">
+            <MudItem xs="6" md="6" sm="12">
+                <DataAnnotationsValidator />
+                <MudTextField Label="Content" Required="true" RequiredError="Content is required"
+                              @bind-Value="model.Content" For="@(() => model.Content)" />
+                <MudText>Level</MudText>
+                <MudRadioGroup @bind-SelectedOption="model.Level" Required="true" RequiredError="Level is required">
+                    <MudRadio Option="Level.Easy" Color="Color.Primary">Easy</MudRadio>
+                    <MudRadio Option="Level.Medium" Color="Color.Warning">Medium</MudRadio>
+                    <MudRadio Option="Level.Difficult" Color="Color.Error">Difficult</MudRadio>
 
-                    </MudRadioGroup>
+                </MudRadioGroup>
+                <MudText>Type</MudText>
+                <MudRadioGroup @bind-SelectedOption="model.QuestionType" Required="true" RequiredError="Question type is required">
+                    <MudRadio Option="QuestionType.SingleSelection" Color="Color.Primary">Single Choice</MudRadio>
+                    <MudRadio Option="QuestionType.MultipleSelection" Color="Color.Secondary">Multiple Choice</MudRadio>
+                </MudRadioGroup>
 
-                    <MudRadioGroup @bind-SelectedOption="model.QuestionType" Required="true" RequiredError="Question type is required">
-                        <MudRadio Option="@(nameof(QuestionType.SingleSelection))" Color="Color.Primary">Single Choice</MudRadio>
-                        <MudRadio Option="@(nameof(QuestionType.MultipleSelection))" Color="Color.Secondary">Multiple Choice</MudRadio>
-                    </MudRadioGroup>
+                <MudSelect Label="Category" @bind-Value="model.CategoryId" Required="true" RequiredError="Category is required"
+                           OffsetY="true" AdornmentIcon="@Icons.Material.Filled.Category" AdornmentColor="Color.Primary">
+                    @foreach (var item in categories)
+                    {
+                        <MudSelectItem Value="item.Id">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
 
-                    <MudSelect Label="Category" @bind-Value="model.CategoryId" Required="true" RequiredError="Category is required"
-                               OffsetY="true" AdornmentIcon="@Icons.Material.Filled.Category" AdornmentColor="Color.Primary">
-                        @foreach (var item in categories)
-                        {
-                            <MudSelectItem Value="item.Id">@item.Name</MudSelectItem>
-                        }
-                    </MudSelect>
+                <MudTextField Label="Explain answer" Required="true" RequiredError="Explain is required"
+                              @bind-Value="model.Explain" For="@(() => model.Explain)" />
+            </MudItem>
+            <MudItem xs="6" md="6" sm="12">
+                <MudText>Answers</MudText>
+                <MudTable Items="@answers" Hover="true" Breakpoint="Breakpoint.Sm"
+                          Loading="@loading" Context="item" LoadingProgressColor="Color.Info">
+                    <HeaderContent>
+                        <MudTh>Content</MudTh>
+                        <MudTh>Correct</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Content">@item.Content</MudTd>
+                        <MudTd DataLabel="Correct">@(item.IsCorrect?"Correct":"")</MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDelete(item.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+                        </MudTd>
+                    </RowTemplate>
+                    <FooterContent>
+                        <MudButton ButtonType="ButtonType.Button" OnClick="AddAnswer" Variant="Variant.Filled" Color="Color.Success">Create</MudButton>
+                    </FooterContent>
+                </MudTable>
+            </MudItem>
+            <MudItem sm="12">
+                <MudToolBar>
+                    <MudSpacer />
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                               Color="Color.Primary" Class="ml-auto">Lưu Lại</MudButton>
+                </MudToolBar>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</EditForm>
 
-                    <MudTextField Label="Explain answer" Required="true" RequiredError="Explain is required"
-                                  @bind-Value="model.Explain" For="@(() => model.Explain)" />
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save</MudButton>
-                </MudCardActions>
-
-            </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="12" md="6">
-
-            <MudCard Elevation="25" Style="height:100%;">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudButton OnClick="AddAnswer">Create</MudButton>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent Class="px-5">
-                    <MudTable Items="@answers" Hover="true" Breakpoint="Breakpoint.Sm"
-                              Loading="@loading" Context="item" LoadingProgressColor="Color.Info">
-                        <HeaderContent>
-                            <MudTh>Content</MudTh>
-                            <MudTh></MudTh>
-                        </HeaderContent>
-                        <RowTemplate>
-                            <MudTd DataLabel="Content">@item.Content</MudTd>
-                            <MudTd DataLabel="Correct">@(item.IsCorrect?"Correct":"")</MudTd>
-                        </RowTemplate>
-                    </MudTable>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </EditForm>
-</MudGrid>
 <MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
     <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
 </MudOverlay>
@@ -101,16 +101,22 @@
         if (!result.Cancelled)
         {
             answers.Add(result.Data as AnswerDto);
+            model.Answers = answers;
         }
     }
     private async Task OnValidSubmit(EditContext context)
     {
+        if (answers.Count(x => x.IsCorrect) > 1 && model.QuestionType == QuestionType.SingleSelection)
+        {
+            Snackbar.Add("Single choice question cannot have multiple correct answers.", Severity.Error);
+            return;
+        }
         loading = true;
         success = await QuestionService.CreateAsync(model);
         if (success)
         {
             Snackbar.Add("Create new item success", Severity.Success);
-            NavigationManager.NavigateTo(UrlConstants.Categories);
+            NavigationManager.NavigateTo(UrlConstants.Questions);
         }
         else
         {
@@ -118,5 +124,22 @@
         }
         loading = false;
         StateHasChanged();
+    }
+
+    public async Task OnDelete(string deleteId)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<ConfirmationDialog>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await QuestionService.DeleteAsync(deleteId);
+        }
     }
 }

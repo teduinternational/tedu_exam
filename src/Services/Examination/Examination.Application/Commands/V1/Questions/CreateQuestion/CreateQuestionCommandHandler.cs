@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,27 +36,24 @@ namespace Examination.Application.Commands.V1.Questions.CreateQuestion
 
         public async Task<ApiResult<QuestionDto>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
         {
-            var itemToAdd = await _questionRepository.GetQuestionsByIdAsync(request.Content);
-            if (itemToAdd != null)
+            if(request.Answers.Count(x=>x.IsCorrect)> 1 && request.QuestionType== Shared.Enums.QuestionType.SingleSelection)
             {
-                _logger.LogError($"Item name existed: {request.Content}");
-                return null;
-
+                return new ApiErrorResult<QuestionDto>("Single choice question cannot have multiple correct answers.");
             }
             var questionId = ObjectId.GenerateNewId().ToString();
             var answers = _mapper.Map<List<AnswerDto>, List<Answer>>(request.Answers);
 
-            itemToAdd = new Question(questionId,
-                                    request.Content,
-                                    request.QuestionType,
-                                    request.Level,
-                                    request.CategoryId,
-                                    answers,
-                                    request.Explain, _httpContextAccessor.GetUserId());
+            var itemToAdd = new Question(questionId,
+                                     request.Content,
+                                     request.QuestionType,
+                                     request.Level,
+                                     request.CategoryId,
+                                     answers,
+                                     request.Explain, _httpContextAccessor.GetUserId());
             try
             {
                 await _questionRepository.InsertAsync(itemToAdd);
-                var result =  _mapper.Map<Question, QuestionDto>(itemToAdd);
+                var result = _mapper.Map<Question, QuestionDto>(itemToAdd);
                 return new ApiSuccessResult<QuestionDto>(result);
             }
             catch (Exception ex)
