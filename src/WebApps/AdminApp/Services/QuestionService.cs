@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Examination.Shared.Categories;
 
 namespace AdminApp.Services.Interfaces
 {
@@ -29,13 +30,13 @@ namespace AdminApp.Services.Interfaces
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<QuestionDto> GetQuestionByIdAsync(string id)
+        public async Task<ApiResult<QuestionDto>> GetQuestionByIdAsync(string id)
         {
-            var result = await _httpClient.GetFromJsonAsync<QuestionDto>($"/api/v1/Questions/{id}");
+            var result = await _httpClient.GetFromJsonAsync<ApiResult<QuestionDto>>($"/api/v1/Questions/{id}");
             return result;
         }
 
-        public async Task<PagedList<QuestionDto>> GetQuestionsPagingAsync(QuestionSearch searchInput)
+        public async Task<ApiResult<PagedList<QuestionDto>>> GetQuestionsPagingAsync(QuestionSearch searchInput)
         {
             var queryStringParam = new Dictionary<string, string>
             {
@@ -47,9 +48,9 @@ namespace AdminApp.Services.Interfaces
                 queryStringParam.Add("searchKeyword", searchInput.Name);
 
 
-            string url = QueryHelpers.AddQueryString("/api/v1/Questions", queryStringParam);
+            string url = QueryHelpers.AddQueryString("/api/v1/Questions/paging", queryStringParam);
 
-            var result = await _httpClient.GetFromJsonAsync<PagedList<QuestionDto>>(url);
+            var result = await _httpClient.GetFromJsonAsync<ApiResult<PagedList<QuestionDto>>>(url);
             return result;
         }
 
@@ -58,5 +59,7 @@ namespace AdminApp.Services.Interfaces
             var result = await _httpClient.PutAsJsonAsync($"/api/v1/Questions", request);
             return result.IsSuccessStatusCode;
         }
+
+       
     }
 }

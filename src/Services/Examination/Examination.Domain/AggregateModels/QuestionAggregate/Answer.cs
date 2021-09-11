@@ -5,7 +5,8 @@ namespace Examination.Domain.AggregateModels.QuestionAggregate
 {
     public class Answer : Entity
     {
-        public Answer(string id, string content, bool isCorrect = false) => (Id, Content, IsCorrect) = (id, content, isCorrect);
+        public Answer(string id, string content, bool isCorrect = false) 
+            => (Id, Content, IsCorrect) = (id, content, isCorrect);
 
         [BsonElement("content")]
         public string Content { get; set; }

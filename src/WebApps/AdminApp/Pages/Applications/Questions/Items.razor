@@ -112,8 +112,12 @@
         try
         {
             var pagingResponse = await QuestionService.GetQuestionsPagingAsync(ListSearch);
-            Elements = pagingResponse.Items;
-            MetaData = pagingResponse.MetaData;
+            if (pagingResponse.IsSuccessed)
+            {
+                Elements = pagingResponse.ResultObj.Items;
+                MetaData = pagingResponse.ResultObj.MetaData;
+            }
+
             loading = false;
         }
         catch (Exception ex)

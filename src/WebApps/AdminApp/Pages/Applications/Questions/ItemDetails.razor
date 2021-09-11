@@ -67,10 +67,14 @@
     private async Task LoadItemDetails(string id)
     {
         loading = true;
-        var item = await QuestionService.GetQuestionByIdAsync(Id);
-        model.Id = item.Id;
-        model.Content = item.Content;
-        model.Explain = item.Explain;
+        var result = await QuestionService.GetQuestionByIdAsync(Id);
+        if (result.IsSuccessed)
+        {
+            model.Id = result.ResultObj.Id;
+            model.Content = result.ResultObj.Content;
+            model.Explain = result.ResultObj.Explain;
+        }
+
         loading = false;
     }
 

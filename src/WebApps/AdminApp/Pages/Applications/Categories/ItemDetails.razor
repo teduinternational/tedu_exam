@@ -67,10 +67,15 @@
     private async Task LoadItemDetails(string id)
     {
         loading = true;
-        var item = await CategoryService.GetCategoryByIdAsync(Id);
-        model.Id = item.Id;
-        model.Name = item.Name;
-        model.UrlPath = item.UrlPath;
+        var result = await CategoryService.GetCategoryByIdAsync(Id);
+        if (result.IsSuccessed)
+        {
+            var category = result.ResultObj;
+            model.Id = category.Id;
+            model.Name = category.Name;
+            model.UrlPath = category.UrlPath;
+
+        }
         loading = false;
     }
 
