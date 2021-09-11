@@ -56,7 +56,8 @@
                         <MudTd DataLabel="Content">@item.Content</MudTd>
                         <MudTd DataLabel="Correct">@(item.IsCorrect?"Correct":"")</MudTd>
                         <MudTd>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDelete(item.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Update" OnClick="async ()=>await OnEdit(item.ClientId)" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Large" Class="ma-2" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDelete(item.ClientId)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
                         </MudTd>
                     </RowTemplate>
                     <FooterContent>
@@ -93,9 +94,13 @@
     }
     private async Task AddAnswer()
     {
-        var parameters = new DialogParameters { ["Model"] = new AnswerDto() };
+        var parameters = new DialogParameters
+        {
+            ["Model"] = new AnswerDto(),
+            ["Mode"] = DialogMode.Add
+        };
 
-        var dialog = DialogService.Show<AddAnswerDialog>("Add Answer", parameters);
+        var dialog = DialogService.Show<AnswerDialog>("Add Answer", parameters);
         var result = await dialog.Result;
 
         if (!result.Cancelled)
@@ -126,7 +131,7 @@
         StateHasChanged();
     }
 
-    public async Task OnDelete(string deleteId)
+    public async Task OnDelete(Guid clientId)
     {
         var parameters = new DialogParameters();
         parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
@@ -139,7 +144,33 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            await QuestionService.DeleteAsync(deleteId);
+            answers = answers.Where(x => x.ClientId != clientId).ToList();
+        }
+    }
+
+    private async Task OnEdit(Guid clientId)
+    {
+        var answer = answers.SingleOrDefault(x => x.ClientId == clientId);
+        if (answer == null)
+        {
+            Snackbar.Add("Cannot edit this answer");
+            return;
+        }
+
+        var parameters = new DialogParameters
+        {
+            ["Model"] = answer,
+            ["Mode"] = DialogMode.Edit
+        };
+
+        var dialog = DialogService.Show<AnswerDialog>("Edit Answer", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            var updatedAnswer = result.Data as AnswerDto;
+            answer.Content = updatedAnswer.Content;
+            answer.IsCorrect = updatedAnswer.IsCorrect;
         }
     }
 }

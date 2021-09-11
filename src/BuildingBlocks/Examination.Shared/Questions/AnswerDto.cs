@@ -15,5 +15,7 @@ namespace Examination.Shared.Questions
         public string Content { get; set; }
 
         public bool IsCorrect { get; set; }
+
+        public Guid ClientId { get; set; } = Guid.NewGuid();
     }
 }

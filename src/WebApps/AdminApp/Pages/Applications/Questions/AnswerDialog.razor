@@ -1,5 +1,6 @@
 ﻿@using Examination.Shared.Questions
 @inject ISnackbar Snackbar
+
 <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
     <MudDialog>
         <TitleContent>
@@ -27,6 +28,8 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
+    [Parameter] public string Mode { set; get; }
+
     [Parameter] public AnswerDto Model { get; set; } = new AnswerDto();
 
     private void Cancel()
@@ -36,7 +39,15 @@
 
     private void OnValidSubmit()
     {
-        Snackbar.Add("Answer added", Severity.Success);
+        if (Mode == DialogMode.Add)
+        {
+            Model.ClientId = Guid.NewGuid();
+            Snackbar.Add("Answer added", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Answer updated", Severity.Success);
+        }
         MudDialog.Close(DialogResult.Ok(Model));
         StateHasChanged();
     }
