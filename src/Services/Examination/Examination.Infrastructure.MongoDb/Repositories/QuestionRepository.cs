@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Examination.Domain.AggregateModels.QuestionAggregate;
-using Examination.Dtos.SeedWork;
+using Examination.Shared.SeedWork;
 using Examination.Infrastructure.SeedWork;
 using Examination.Shared.Questions;
 using MediatR;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Shared.Questions;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 {
-    public class GetQuestionByIdQueryHandler : IRequestHandler<GetQuestionByIdQuery, QuestionDto>
+    public class GetQuestionByIdQueryHandler : IRequestHandler<GetQuestionByIdQuery, ApiResult<QuestionDto>>
     {
 
         private readonly IQuestionRepository _questionRepository;
@@ -32,7 +33,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 
         }
 
-        public async Task<QuestionDto> Handle(GetQuestionByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<QuestionDto>> Handle(GetQuestionByIdQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetQuestionByIdQueryHandler");
 
@@ -41,7 +42,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 
             _logger.LogInformation("END: GetQuestionByIdQueryHandler");
 
-            return item;
+            return new ApiSuccessResult<QuestionDto>(item);
         }
     }
 }

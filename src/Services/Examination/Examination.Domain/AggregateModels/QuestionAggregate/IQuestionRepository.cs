@@ -1,5 +1,5 @@
 using Examination.Domain.SeedWork;
-using Examination.Dtos.SeedWork;
+using Examination.Shared.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
