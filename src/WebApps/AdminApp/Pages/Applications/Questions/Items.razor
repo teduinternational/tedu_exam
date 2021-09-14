@@ -1,7 +1,9 @@
 ﻿@page "/app/questions"
 @using Examination.Shared.Questions;
+@using Examination.Shared.Categories;
 @using Examination.Shared.Enums;
 @inject IQuestionService QuestionService
+@inject ICategoryService CategoryService
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
@@ -18,6 +20,30 @@
             </MudCardHeader>
             <MudCardContent Class="px-0">
                 <MudGrid>
+                    <MudItem xs="12" sm="12" md="12">
+                        <div class="pa-3">
+                            <div class="d-flex" style="align-items: baseline;">
+                                <MudTextField @bind-Value="@SearchModel.Name"
+                                              Immediate="true"
+                                              Placeholder="Enter queston content..."
+                                              Clearable="true"
+                                              Class="mt-0 user-search-text"
+                                              AdornmentIcon="@Icons.Filled.Search" />
+
+                                <MudSelect Label="Choose category" @bind-Value="SearchModel.CategoryId"
+                                           Clearable="true" AdornmentColor="Color.Primary"
+                                           Style="width:200px">
+                                    @foreach (var item in Categories)
+                                    {
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                <MudButton ButtonType="ButtonType.Button" Color="Color.Success" OnClick="HandleSearch">
+                                    Search
+                                </MudButton>
+                            </div>
+                        </div>
+                    </MudItem>
                     <MudItem xs="12" md="12">
                         <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
                             <HeaderContent>
@@ -72,19 +98,20 @@
     private List<QuestionDto> Elements = new List<QuestionDto>();
     public MetaData MetaData { get; set; } = new MetaData();
 
-    private QuestionSearch ListSearch = new QuestionSearch();
-
+    private QuestionSearch SearchModel = new QuestionSearch();
+    private List<CategoryDto> Categories = new List<CategoryDto>();
 
 
     protected override async Task OnInitializedAsync()
     {
-        await GetTasks();
+        await FillData();
+        await FillCategories();
     }
 
-    public async Task SearchData(QuestionSearch taskListSearch)
+    public async Task SearchData(QuestionSearch searchModel)
     {
-        ListSearch = taskListSearch;
-        await GetTasks();
+        SearchModel = searchModel;
+        await FillData();
     }
 
     public async Task OnDeleteTask(string deleteId)
@@ -102,16 +129,26 @@
         if (!result.Cancelled)
         {
             await QuestionService.DeleteAsync(DeleteId);
-            await GetTasks();
+            await FillCategories();
+            await FillData();
         }
     }
 
-    private async Task GetTasks()
+    private async Task FillCategories()
+    {
+        var categoryResult = await CategoryService.GetAllCategoriesAsync();
+        if (categoryResult.IsSuccessed)
+        {
+            Categories = categoryResult.ResultObj;
+        }
+    }
+
+    private async Task FillData()
     {
         loading = true;
         try
         {
-            var pagingResponse = await QuestionService.GetQuestionsPagingAsync(ListSearch);
+            var pagingResponse = await QuestionService.GetQuestionsPagingAsync(SearchModel);
             if (pagingResponse.IsSuccessed)
             {
                 Elements = pagingResponse.ResultObj.Items;
@@ -130,12 +167,17 @@
 
     private async Task SelectedPage(int page)
     {
-        ListSearch.PageNumber = page;
-        await GetTasks();
+        SearchModel.PageNumber = page;
+        await FillData();
     }
 
     private void NavigateToEdit(string id)
     {
-        NavigationManager.NavigateTo($"/app/categories/details/{id}");
+        NavigationManager.NavigateTo($"/app/questions/details/{id}");
+    }
+
+    public async Task HandleSearch()
+    {
+        await FillData();
     }
 }
