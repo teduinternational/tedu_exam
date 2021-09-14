@@ -13,6 +13,6 @@ namespace Examination.Shared.Questions
 
         public bool IsCorrect { get; set; }
 
-        public Guid ClientId { set; get; }
+        public Guid ClientId { set; get; } = Guid.NewGuid();
     }
 }
