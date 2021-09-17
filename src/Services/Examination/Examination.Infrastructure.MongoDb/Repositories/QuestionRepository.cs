@@ -9,6 +9,7 @@ using Examination.Shared.Questions;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Examination.Shared.Enums;
 
 namespace Examination.Infrastructure.Repositories
 {
@@ -38,12 +39,22 @@ namespace Examination.Infrastructure.Repositories
 
             var totalRow = await Collection.Find(filter).CountDocumentsAsync();
             var items = await Collection.Find(filter)
-                .SortByDescending(x=>x.DateCreated)
+                .SortByDescending(x => x.DateCreated)
                 .Skip((pageIndex - 1) * pageSize)
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new PagedList<Question>(items,totalRow,pageIndex,pageSize);
+            return new PagedList<Question>(items, totalRow, pageIndex, pageSize);
+        }
+
+        public async Task<List<Question>> GetRandomQuestionsForExamAsync(string categoryId, Level level, int numberOfQuestions)
+        {
+            var filter = Builders<Question>.Filter.Where(s => s.CategoryId == categoryId && s.Level == level);
+            var items = await Collection.Find(filter)
+                .SortByDescending(x => Guid.NewGuid())
+                .Limit(numberOfQuestions)
+                .ToListAsync();
+            return items;
         }
     }
 }

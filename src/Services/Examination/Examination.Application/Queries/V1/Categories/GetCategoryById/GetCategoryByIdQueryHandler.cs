@@ -42,7 +42,7 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoryById
 
             _logger.LogInformation("END: GetCategoryByIdQueryHandler");
 
-            return new ApiSuccessResult<CategoryDto>(item);
+            return new ApiSuccessResult<CategoryDto>(200, item);
         }
     }
 }

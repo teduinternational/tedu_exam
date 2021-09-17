@@ -11,10 +11,10 @@ namespace Examination.Shared.SeedWork
         public ApiSuccessResult()
         {
         }
-        public ApiSuccessResult(T resultObj) : base(true, resultObj)
+        public ApiSuccessResult(int statusCode, T resultObj) : base(statusCode, true, resultObj)
         {
         }
-        public ApiSuccessResult(T resultObj, string message) : base(true, resultObj, message)
+        public ApiSuccessResult(int statusCode, T resultObj, string message) : base(statusCode, true, resultObj, message)
         {
         }
     }

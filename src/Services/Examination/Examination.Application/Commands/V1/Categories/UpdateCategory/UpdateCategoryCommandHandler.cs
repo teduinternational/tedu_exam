@@ -29,13 +29,13 @@ namespace Examination.Application.Commands.V1.Categories.UpdateCategory
             if (itemToUpdate == null)
             {
                 _logger.LogError($"Item is not found {request.Id}");
-                return new ApiErrorResult<bool>($"Item is not found {request.Id}");
+                return new ApiErrorResult<bool>(400, $"Item is not found {request.Id}");
             }
 
             itemToUpdate.Name = request.Name;
             itemToUpdate.UrlPath = request.UrlPath;
             await _categoryRepository.UpdateAsync(itemToUpdate);
-            return new ApiSuccessResult<bool>(true, "Update successful");
+            return new ApiSuccessResult<bool>(200, true, "Update successful");
         }
     }
 }

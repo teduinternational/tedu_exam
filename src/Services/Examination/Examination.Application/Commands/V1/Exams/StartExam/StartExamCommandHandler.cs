@@ -30,7 +30,7 @@ namespace Examination.Application.Commands.V1.Exams.StartExam
                 examResult.StartExam(request.FirstName, request.LastName);
                 await _examResultRepository.InsertAsync(examResult);
             }
-            return new ApiSuccessResult<bool>(true);
+            return new ApiSuccessResult<bool>(200, true);
         }
     }
 }
