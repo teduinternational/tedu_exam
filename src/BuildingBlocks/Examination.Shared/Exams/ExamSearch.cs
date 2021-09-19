@@ -1,6 +1,6 @@
 ﻿using Examination.Shared.SeedWork;
 
-namespace Examination.Shared.Questions
+namespace Examination.Shared.Exams
 {
     public class ExamSearch : PagingParameters
     {
