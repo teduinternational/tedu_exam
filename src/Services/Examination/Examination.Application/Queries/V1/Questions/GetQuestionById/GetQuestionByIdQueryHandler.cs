@@ -20,13 +20,13 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionById
         private readonly ILogger<GetQuestionByIdQueryHandler> _logger;
 
         public GetQuestionByIdQueryHandler(
-                IQuestionRepository QuestionRepository,
+                IQuestionRepository questionRepository,
                 IMapper mapper,
                 ILogger<GetQuestionByIdQueryHandler> logger,
                 IClientSessionHandle clientSessionHandle
             )
         {
-            _questionRepository = QuestionRepository ?? throw new ArgumentNullException(nameof(QuestionRepository));
+            _questionRepository = questionRepository ?? throw new ArgumentNullException(nameof(questionRepository));
             _clientSessionHandle = clientSessionHandle ?? throw new ArgumentNullException(nameof(_clientSessionHandle));
             _mapper = mapper;
             _logger = logger;
@@ -42,7 +42,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 
             _logger.LogInformation("END: GetQuestionByIdQueryHandler");
 
-            return new ApiSuccessResult<QuestionDto>(item);
+            return new ApiSuccessResult<QuestionDto>(200, item);
         }
     }
 }

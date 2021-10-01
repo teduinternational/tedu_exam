@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Examination.Application.Queries.V1.Exams.GetAllExams;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Shared.Exams;
 using Examination.Shared.SeedWork;
@@ -12,17 +13,17 @@ using MongoDB.Driver;
 
 namespace Examination.Application.Queries.V1.Exams.GetHomeExamList
 {
-    public class GetHomeExamListQueryHandler : IRequestHandler<GetHomeExamListQuery, ApiResult<IEnumerable<ExamDto>>>
+    public class GetAllExamsQueryHandler : IRequestHandler<GetAllExamsQuery, ApiResult<IEnumerable<ExamDto>>>
     {
         private readonly IExamRepository _examRepository;
         private readonly IClientSessionHandle _clientSessionHandle;
         private readonly IMapper _mapper;
-        private readonly ILogger<GetHomeExamListQueryHandler> _logger;
+        private readonly ILogger<GetAllExamsQueryHandler> _logger;
 
-        public GetHomeExamListQueryHandler(
+        public GetAllExamsQueryHandler(
                 IExamRepository examRepository,
                 IMapper mapper,
-                ILogger<GetHomeExamListQueryHandler> logger,
+                ILogger<GetAllExamsQueryHandler> logger,
                 IClientSessionHandle clientSessionHandle
             )
         {
@@ -32,15 +33,15 @@ namespace Examination.Application.Queries.V1.Exams.GetHomeExamList
             _logger = logger;
 
         }
-        public async Task<ApiResult<IEnumerable<ExamDto>>> Handle(GetHomeExamListQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<IEnumerable<ExamDto>>> Handle(GetAllExamsQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
-            var exams = await _examRepository.GetExamListAsync();
+            var exams = await _examRepository.GetAllExamsAsync();
             var examDtos = _mapper.Map<IEnumerable<ExamDto>>(exams);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            return new ApiSuccessResult<IEnumerable<ExamDto>>(examDtos);
+            return new ApiSuccessResult<IEnumerable<ExamDto>>(200, examDtos);
         }
     }
 }

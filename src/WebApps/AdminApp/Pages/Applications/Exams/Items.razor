@@ -1,0 +1,190 @@
+﻿@page "/app/exams"
+@using Examination.Shared.Exams;
+@using Examination.Shared.Categories;
+@using Examination.Shared.Enums;
+@inject IExamService ExamService
+@inject ICategoryService CategoryService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Exam List</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12">
+        <MudCard Elevation="25" Style="height:100%;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send"
+                               Link="/app/exams/new" Color="Color.Primary">Create</MudButton>
+
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0">
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="12">
+                        <div class="pa-3">
+                            <div class="d-flex" style="align-items: baseline;">
+                                <MudTextField @bind-Value="@SearchModel.Name"
+                                              Immediate="true"
+                                              Placeholder="Enter content..."
+                                              Clearable="true"
+                                              Class="mt-0 user-search-text"
+                                              AdornmentIcon="@Icons.Filled.Search" />
+
+                                <MudSelect Label="Choose category" @bind-Value="SearchModel.CategoryId"
+                                           Clearable="true" AdornmentColor="Color.Primary"
+                                           Style="width:200px">
+                                    @foreach (var item in Categories)
+                                    {
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                <MudButton ButtonType="ButtonType.Button" Color="Color.Success" OnClick="HandleSearch">
+                                    Search
+                                </MudButton>
+                            </div>
+                        </div>
+                    </MudItem>
+                    <MudItem xs="12" md="12">
+                        <MudTable Items="@Elements" FixedHeader="true" FixedFooter="false" Height="400px">
+                            <HeaderContent>
+                                <MudTh>Name</MudTh>
+                                <MudTh>Level</MudTh>
+                                <MudTh>Category</MudTh>
+                                <MudTh>Date Create</MudTh>
+                                <MudTh></MudTh>
+                            </HeaderContent>
+                            <RowTemplate>
+                                <MudTd DataLabel="Name">@context.Name</MudTd>
+                                <MudTd DataLabel="Name">@context.Level</MudTd>
+                                <MudTd DataLabel="Name">@context.CategoryName</MudTd>
+                                <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
+                                <MudTd>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="()=>NavigateToEdit(context.Id)" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDeleteTask(context.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+
+                                </MudTd>
+                            </RowTemplate>
+
+                            <PagerContent>
+                                <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
+                            </PagerContent>
+                        </MudTable>
+                    </MudItem>
+                </MudGrid>
+
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
+
+@code{
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [CascadingParameter]
+    private Error Error { set; get; }
+
+    public bool loading = false;
+
+    private string DeleteId { set; get; }
+    private List<ExamDto> Elements = new List<ExamDto>();
+    public MetaData MetaData { get; set; } = new MetaData();
+
+    private ExamSearch SearchModel = new ExamSearch();
+    private List<CategoryDto> Categories = new List<CategoryDto>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FillData();
+        await FillCategories();
+    }
+
+    public async Task SearchData(ExamSearch searchModel)
+    {
+        SearchModel = searchModel;
+        await FillData();
+    }
+
+    public async Task OnDeleteTask(string deleteId)
+    {
+        DeleteId = deleteId;
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<ConfirmationDialog>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var deleteResult = await ExamService.DeleteAsync(DeleteId);
+            if (deleteResult.IsSuccessed)
+            {
+                await FillCategories();
+                await FillData();
+            }
+            else
+            {
+                Snackbar.Add("Delete is not success", Severity.Error);
+            }
+
+        }
+    }
+
+    private async Task FillCategories()
+    {
+        var categoryResult = await CategoryService.GetAllCategoriesAsync();
+        if (categoryResult.IsSuccessed)
+        {
+            Categories = categoryResult.ResultObj;
+        }
+    }
+
+    private async Task FillData()
+    {
+        loading = true;
+        try
+        {
+            var pagingResponse = await ExamService.GetExamsPagingAsync(SearchModel);
+            if (pagingResponse.IsSuccessed)
+            {
+                Elements = pagingResponse.ResultObj.Items;
+                MetaData = pagingResponse.ResultObj.MetaData;
+            }
+
+            loading = false;
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+            loading = false;
+        }
+
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        SearchModel.PageNumber = page;
+        await FillData();
+    }
+
+    private void NavigateToEdit(string id)
+    {
+        NavigationManager.NavigateTo($"/app/exams/details/{id}");
+    }
+
+    public async Task HandleSearch()
+    {
+        await FillData();
+    }
+} 

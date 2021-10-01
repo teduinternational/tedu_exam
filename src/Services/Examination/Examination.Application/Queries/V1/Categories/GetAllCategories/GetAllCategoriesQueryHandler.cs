@@ -41,7 +41,7 @@ namespace Examination.Application.Queries.V1.Categories.GetAllCategories
             var items = _mapper.Map<List<CategoryDto>>(result);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            return new ApiSuccessResult<List<CategoryDto>>(items);
+            return new ApiSuccessResult<List<CategoryDto>>(200, items);
         }
     }
 }

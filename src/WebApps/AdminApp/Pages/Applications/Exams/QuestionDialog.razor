@@ -1,0 +1,153 @@
+﻿@using Examination.Shared.Questions;
+@using Examination.Shared.Categories;
+@using Examination.Shared.Enums;
+@inject IQuestionService QuestionService
+@inject ICategoryService CategoryService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+<MudDialog>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard Elevation="25" Style="height:100%; width:100%">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+
+                            <MudToolBar>
+                                <MudTextField @bind-Value="@QuestionSearch.Name"
+                                              Immediate="true"
+                                              Placeholder="Enter queston content..."
+                                              Clearable="true"
+                                              Class="mt-0 user-search-text"
+                                              AdornmentIcon="@Icons.Filled.Search" />
+
+                                <MudSelect Label="Choose category" @bind-Value="QuestionSearch.CategoryId"
+                                           Clearable="true" AdornmentColor="Color.Primary"
+                                           Style="width:200px">
+                                    @foreach (var item in Categories)
+                                    {
+                                        <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                <MudButton ButtonType="ButtonType.Button" Color="Color.Success" OnClick="HandleSearch">
+                                    Search
+                                </MudButton>
+                            </MudToolBar>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="px-0">
+                        <MudGrid>
+                            <MudItem xs="12" md="12">
+                                <MudTable Items="@Questions" FixedHeader="true" FixedFooter="false" Height="300px" MultiSelection="true" @bind-SelectedItems="SelectedQuestions">
+                                    <HeaderContent>
+                                        <MudTh>Content</MudTh>
+                                        <MudTh>Level</MudTh>
+                                        <MudTh>Type</MudTh>
+                                        <MudTh>Category</MudTh>
+                                        <MudTh>Date Create</MudTh>
+                                        <MudTh></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Name">@context.Content</MudTd>
+                                        <MudTd DataLabel="Name">@context.Level</MudTd>
+                                        <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection?"Single":"Multiples") </MudTd>
+                                        <MudTd DataLabel="Name">@context.CategoryName</MudTd>
+                                        <MudTd DataLabel="Name">@context.DateCreated.ToString("dd/MM/yyyy hh:mm")</MudTd>
+                                        <MudTd>
+
+                                        </MudTd>
+                                    </RowTemplate>
+
+                                    <PagerContent>
+                                        <Pagination MetaData="MetaData" Spread="5" SelectedPage="SelectedPage"></Pagination>
+                                    </PagerContent>
+                                </MudTable>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="() => Cancel()">Đóng</MudButton>
+        <MudButton ButtonType="ButtonType.Button" OnClick="OnValidSubmit" Color="Color.Success">Lưu lại</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    private Error Error { set; get; }
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public List<QuestionDto> Questions { get; set; } = new List<QuestionDto>();
+    [Parameter] public HashSet<QuestionDto> SelectedQuestions { get; set; }
+
+    public MetaData MetaData { get; set; } = new MetaData();
+    private List<CategoryDto> Categories = new List<CategoryDto>();
+
+    public QuestionSearch QuestionSearch = new QuestionSearch();
+    public bool loading = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await FillCategories();
+        await FillData();
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void OnValidSubmit()
+    {
+        Snackbar.Add("Question list updated", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(SelectedQuestions));
+        StateHasChanged();
+    }
+    private async Task SelectedPage(int page)
+    {
+        QuestionSearch.PageNumber = page;
+        await FillData();
+    }
+
+    private async Task FillCategories()
+    {
+        var categoryResult = await CategoryService.GetAllCategoriesAsync();
+        if (categoryResult.IsSuccessed)
+        {
+            Categories = categoryResult.ResultObj;
+        }
+    }
+
+    private async Task FillData()
+    {
+        loading = true;
+        try
+        {
+            var pagingResponse = await QuestionService.GetQuestionsPagingAsync(QuestionSearch);
+            if (pagingResponse.IsSuccessed)
+            {
+                Questions = pagingResponse.ResultObj.Items;
+                MetaData = pagingResponse.ResultObj.MetaData;
+            }
+
+            loading = false;
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
+            loading = false;
+        }
+
+    }
+    public async Task HandleSearch()
+    {
+        await FillData();
+    }
+} 

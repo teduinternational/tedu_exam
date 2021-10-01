@@ -21,13 +21,13 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
         private readonly ILogger<GetQuestionsPagingQueryHandler> _logger;
 
         public GetQuestionsPagingQueryHandler(
-                IQuestionRepository QuestionRepository,
+                IQuestionRepository questionRepository,
                 IMapper mapper,
                 ILogger<GetQuestionsPagingQueryHandler> logger,
                 IClientSessionHandle clientSessionHandle
             )
         {
-            _QuestionRepository = QuestionRepository ?? throw new ArgumentNullException(nameof(QuestionRepository));
+            _QuestionRepository = questionRepository ?? throw new ArgumentNullException(nameof(questionRepository));
             _clientSessionHandle = clientSessionHandle ?? throw new ArgumentNullException(nameof(_clientSessionHandle));
             _mapper = mapper;
             _logger = logger;
@@ -48,7 +48,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionsPaging
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
             var pagedItems = new PagedList<QuestionDto>(items, result.MetaData.TotalCount, request.PageIndex, request.PageSize);
 
-            return new ApiSuccessResult<PagedList<QuestionDto>>(pagedItems);
+            return new ApiSuccessResult<PagedList<QuestionDto>>(200, pagedItems);
         }
     }
 }

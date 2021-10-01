@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Examination.Application.Queries.V1.Exams.GetHomeExamList
+namespace Examination.Application.Queries.V1.Exams.GetAllExams
 {
-    public class GetHomeExamListQuery : IRequest<ApiResult<IEnumerable<ExamDto>>>
+    public class GetAllExamsQuery : IRequest<ApiResult<IEnumerable<ExamDto>>>
     {
-        public GetHomeExamListQuery()
+        public GetAllExamsQuery()
         {
         }
     }
