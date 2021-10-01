@@ -29,7 +29,7 @@ namespace Examination.Application.Commands.V1.Exams.UpdateExam
         {
             _examRepository = examRepository;
             _questionRepository = questionRepository;
-            _questionRepository = questionRepository;
+            _categoryRepository = categoryRepository;
             _logger = logger;
             _mapper = mapper;
 

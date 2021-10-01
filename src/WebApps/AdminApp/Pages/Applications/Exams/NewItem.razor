@@ -22,7 +22,7 @@
                               @bind-Value="model.Name" For="@(() => model.Name)" />
                 <MudTextField Label="Short description" Required="true" RequiredError="Short description is required"
                               @bind-Value="model.ShortDesc" For="@(() => model.ShortDesc)" />
-                <MudTextField Label="Content" Required="true" RequiredError="Content is required"
+                <MudTextField Label="Content" Required="true" RequiredError="Content is required" Lines="5"
                               @bind-Value="model.Content" For="@(() => model.Content)" />
 
                 <MudNumericField  Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
