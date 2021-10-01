@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace AdminApp.Services.Interfaces
 {
@@ -55,10 +56,11 @@ namespace AdminApp.Services.Interfaces
             return result;
         }
 
-        public async Task<bool> UpdateAsync(UpdateExamRequest request)
+        public async Task<ApiResult<bool>> UpdateAsync(UpdateExamRequest request)
         {
             var result = await _httpClient.PutAsJsonAsync($"/api/v1/Exams", request);
-            return result.IsSuccessStatusCode;
+            var content = await result.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResult<bool>>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true});
         }
 
        

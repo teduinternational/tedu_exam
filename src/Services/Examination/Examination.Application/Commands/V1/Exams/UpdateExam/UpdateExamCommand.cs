@@ -13,7 +13,6 @@ namespace Examination.Application.Commands.V1.Exams.UpdateExam
     public class UpdateExamCommand : IRequest<ApiResult<bool>>
     {
         [Required]
-        [ValidateMongoId]
         public string Id { get; set; }
 
         [Required]
@@ -27,7 +26,7 @@ namespace Examination.Application.Commands.V1.Exams.UpdateExam
         [Required]
         public int NumberOfQuestions { get; set; }
 
-        public TimeSpan? Duration { get; set; }
+        public int? DurationInMinutes { get; set; }
 
         public List<QuestionDto> Questions { get; set; }
 

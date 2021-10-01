@@ -25,6 +25,9 @@
                 <MudTextField Label="Content" Required="true" RequiredError="Content is required"
                               @bind-Value="model.Content" For="@(() => model.Content)" />
 
+                <MudNumericField  Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
+                              @bind-Value="model.DurationInMinutes" For="@(() => model.DurationInMinutes)" />
+
                 <MudTextField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
                               @bind-Value="model.NumberOfQuestions" For="@(() => model.NumberOfQuestions)" />
 
@@ -32,10 +35,10 @@
                               @bind-Value="model.NumberOfQuestionCorrectForPass" For="@(() => model.NumberOfQuestionCorrectForPass)" />
 
                 <MudCheckBox Label="Restrict time"
-                 @bind-Checked="@model.IsTimeRestricted" For="@(() => model.IsTimeRestricted)"></MudCheckBox>
-                
+                             @bind-Checked="@model.IsTimeRestricted" For="@(() => model.IsTimeRestricted)"></MudCheckBox>
+
                 <MudCheckBox Label="Auto generate question"
-                 @bind-Checked="@model.AutoGenerateQuestion" For="@(() => model.AutoGenerateQuestion)"></MudCheckBox>
+                             @bind-Checked="@model.AutoGenerateQuestion" For="@(() => model.AutoGenerateQuestion)"></MudCheckBox>
 
                 <MudText>Level</MudText>
                 <MudRadioGroup @bind-SelectedOption="model.Level" Required="true" RequiredError="Level is required">
@@ -55,6 +58,8 @@
             </MudItem>
             <MudItem xs="6" md="6" sm="12">
                 <MudText>Questions</MudText>
+                <MudButton ButtonType="ButtonType.Button" OnClick="AddQuestions" Variant="Variant.Filled" Color="Color.Success">Create</MudButton>
+
                 <MudTable Items="@questions" Hover="true" Breakpoint="Breakpoint.Sm"
                           Loading="@loading" Context="item" LoadingProgressColor="Color.Info">
                     <HeaderContent>
@@ -69,9 +74,6 @@
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDelete(item.Id)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
                         </MudTd>
                     </RowTemplate>
-                    <FooterContent>
-                        <MudButton ButtonType="ButtonType.Button" OnClick="AddAnswer" Variant="Variant.Filled" Color="Color.Success">Create</MudButton>
-                    </FooterContent>
                 </MudTable>
             </MudItem>
             <MudItem sm="12">
@@ -95,7 +97,7 @@
     public string Id { set; get; }
     CreateExamRequest model = new CreateExamRequest();
     List<CategoryDto> categories = new List<CategoryDto>();
-    List<QuestionDto> questions = new List<QuestionDto>();
+    HashSet<QuestionDto> questions = new HashSet<QuestionDto>();
 
     protected async override Task OnInitializedAsync()
     {
@@ -105,21 +107,23 @@
             categories = result.ResultObj;
         }
     }
-    private async Task AddAnswer()
+    private async Task AddQuestions()
     {
         var parameters = new DialogParameters
         {
-            ["Model"] = new AnswerDto(),
-            ["Mode"] = DialogMode.Add
+            ["SelectedQuestions"] = questions
         };
-
-        var dialog = DialogService.Show<QuestionDialog>("Add Answer", parameters);
+        var dialog = DialogService.Show<QuestionDialog>("Add Answer", parameters,
+            new DialogOptions()
+            {
+                MaxWidth = MaxWidth.Large
+            });
         var result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            questions.Add(result.Data as QuestionDto);
-            model.Questions = questions;
+            questions = result.Data as HashSet<QuestionDto>;
+            model.Questions = questions.ToList();
         }
     }
     private async Task OnValidSubmit(EditContext context)
@@ -129,7 +133,7 @@
         if (success)
         {
             Snackbar.Add("Create new item success", Severity.Success);
-            NavigationManager.NavigateTo(UrlConstants.Questions);
+            NavigationManager.NavigateTo(UrlConstants.Exams);
         }
         else
         {
@@ -152,7 +156,7 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            questions = questions.Where(x => x.Id != id).ToList();
+            questions.RemoveWhere(x => x.Id == id);
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Examination.Shared.Exams
     public class UpdateExamRequest
     {
         [Required]
-        [ValidateMongoId]
         public string Id { get; set; }
 
         [Required]
@@ -24,7 +23,7 @@ namespace Examination.Shared.Exams
         [Required]
         public int NumberOfQuestions { get; set; }
 
-        public TimeSpan? Duration { get; set; }
+        public int? DurationInMinutes { get; set; }
 
         public List<QuestionDto> Questions { get; set; }
 

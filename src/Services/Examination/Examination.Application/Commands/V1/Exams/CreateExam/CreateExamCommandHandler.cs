@@ -58,14 +58,13 @@ namespace Examination.Application.Commands.V1.Exams.CreateExam
             }
 
             var category = await _categoryRepository.GetCategoriesByIdAsync(request.CategoryId);
-            var examId = ObjectId.GenerateNewId().ToString();
             var currentUserId = _httpContextAccessor.GetUserId();
             var itemToAdd = new Exam(
-                examId,
+                request.Name,
                 request.ShortDesc,
                 request.Content,
                 request.NumberOfQuestions,
-                request.Duration,
+                request.DurationInMinutes,
                 questions,
                 request.Level,
                 currentUserId,
