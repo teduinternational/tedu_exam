@@ -8,8 +8,8 @@ namespace AdminApp.Services.Interfaces
     {
         Task<ApiResult<PagedList<ExamDto>>> GetExamsPagingAsync(ExamSearch search);
         Task<ApiResult<ExamDto>> GetExamByIdAsync(string id);
-        Task<bool> CreateAsync(CreateExamRequest request);
+        Task<ApiResult<ExamDto>> CreateAsync(CreateExamRequest request);
         Task<ApiResult<bool>> UpdateAsync(UpdateExamRequest request);
-        Task<bool> DeleteAsync(string id);
+        Task<ApiResult<bool>> DeleteAsync(string id);
     }
 }

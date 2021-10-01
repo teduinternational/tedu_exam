@@ -28,10 +28,10 @@
                 <MudNumericField  Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
                               @bind-Value="model.DurationInMinutes" For="@(() => model.DurationInMinutes)" />
 
-                <MudTextField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
+                <MudNumericField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
                               @bind-Value="model.NumberOfQuestions" For="@(() => model.NumberOfQuestions)" />
 
-                <MudTextField Label="Mimimum correct for pass" Required="true" RequiredError="Number of questions for pass is required"
+                <MudNumericField Label="Mimimum correct for pass" Required="true" RequiredError="Number of questions for pass is required"
                               @bind-Value="model.NumberOfQuestionCorrectForPass" For="@(() => model.NumberOfQuestionCorrectForPass)" />
 
                 <MudCheckBox Label="Restrict time"
@@ -129,15 +129,15 @@
     private async Task OnValidSubmit(EditContext context)
     {
         loading = true;
-        success = await ExamService.CreateAsync(model);
-        if (success)
+        var result = await ExamService.CreateAsync(model);
+        if (result.IsSuccessed)
         {
             Snackbar.Add("Create new item success", Severity.Success);
             NavigationManager.NavigateTo(UrlConstants.Exams);
         }
         else
         {
-            Snackbar.Add("Create action is not success", Severity.Error);
+            Snackbar.Add(result.Message, Severity.Error);
         }
         loading = false;
         StateHasChanged();

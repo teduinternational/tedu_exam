@@ -18,16 +18,18 @@ namespace AdminApp.Services.Interfaces
             _httpClient = httpClient;
         }
 
-        public async Task<bool> CreateAsync(CreateExamRequest request)
+        public async Task<ApiResult<ExamDto>> CreateAsync(CreateExamRequest request)
         {
             var result = await _httpClient.PostAsJsonAsync("/api/v1/Exams", request);
-            return result.IsSuccessStatusCode;
+            var content = await result.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResult<ExamDto>>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<ApiResult<bool>> DeleteAsync(string id)
         {
             var result = await _httpClient.DeleteAsync($"/api/v1/Exams/{id}");
-            return result.IsSuccessStatusCode;
+            var content = await result.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<ApiResult<bool>>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<ApiResult<ExamDto>> GetExamByIdAsync(string id)
@@ -44,11 +46,11 @@ namespace AdminApp.Services.Interfaces
                 ["pageSize"] = searchInput.PageSize.ToString()
             };
 
-            //if (!string.IsNullOrEmpty(searchInput.Name))
-            //    queryStringParam.Add("searchKeyword", searchInput.Name);
+            if (!string.IsNullOrEmpty(searchInput.Name))
+                queryStringParam.Add("searchKeyword", searchInput.Name);
 
-            //if(!string.IsNullOrEmpty(searchInput.CategoryId))
-            //    queryStringParam.Add("categoryId", searchInput.CategoryId);
+            if (!string.IsNullOrEmpty(searchInput.CategoryId))
+                queryStringParam.Add("categoryId", searchInput.CategoryId);
 
             string url = QueryHelpers.AddQueryString("/api/v1/Exams/paging", queryStringParam);
 

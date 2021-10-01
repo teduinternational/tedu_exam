@@ -6,6 +6,7 @@
 @inject ICategoryService CategoryService
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Exam List</MudText>
 <MudGrid>
@@ -126,9 +127,17 @@
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            await ExamService.DeleteAsync(DeleteId);
-            await FillCategories();
-            await FillData();
+            var deleteResult = await ExamService.DeleteAsync(DeleteId);
+            if (deleteResult.IsSuccessed)
+            {
+                await FillCategories();
+                await FillData();
+            }
+            else
+            {
+                Snackbar.Add("Delete is not success", Severity.Error);
+            }
+
         }
     }
 

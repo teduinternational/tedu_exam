@@ -28,10 +28,10 @@
                 <MudNumericField Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
                                  @bind-Value="model.DurationInMinutes" For="@(() => model.DurationInMinutes)" />
 
-                <MudTextField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
+                <MudNumericField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
                               @bind-Value="model.NumberOfQuestions" For="@(() => model.NumberOfQuestions)" />
 
-                <MudTextField Label="Mimimum correct for pass" Required="true" RequiredError="Number of questions for pass is required"
+                <MudNumericField Label="Mimimum correct for pass" Required="true" RequiredError="Number of questions for pass is required"
                               @bind-Value="model.NumberOfQuestionCorrectForPass" For="@(() => model.NumberOfQuestionCorrectForPass)" />
 
                 <MudCheckBox Label="Restrict time"
