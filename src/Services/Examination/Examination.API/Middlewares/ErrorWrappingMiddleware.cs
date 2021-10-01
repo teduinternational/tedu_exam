@@ -38,7 +38,7 @@ namespace Examination.API.Middlewares
             {
                 context.Response.ContentType = "application/json";
 
-                var response = new ApiErrorResult<bool>(errorMsg);
+                var response = new ApiErrorResult<bool>(500, errorMsg);
 
                 var json = JsonSerializer.Serialize(response);
 

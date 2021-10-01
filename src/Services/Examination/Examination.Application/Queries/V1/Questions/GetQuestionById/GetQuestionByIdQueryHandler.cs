@@ -42,7 +42,7 @@ namespace Examination.Application.Queries.V1.Questions.GetQuestionById
 
             _logger.LogInformation("END: GetQuestionByIdQueryHandler");
 
-            return new ApiSuccessResult<QuestionDto>(item);
+            return new ApiSuccessResult<QuestionDto>(200, item);
         }
     }
 }

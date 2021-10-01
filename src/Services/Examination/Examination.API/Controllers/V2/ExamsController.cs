@@ -20,9 +20,9 @@ namespace Examination.API.Controllers.V2
         [HttpGet]
         public async Task<IActionResult> GetExamList(string sample)
         {
-            var query = new GetHomeExamListQuery();
-            var queryResult = await _mediator.Send(query);
-            return Ok(queryResult);
+            var query = new GetAllExamsQuery();
+            var result = await _mediator.Send(query);
+            return StatusCode(result.StatusCode, result);
         }
 
     }

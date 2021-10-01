@@ -40,7 +40,7 @@ namespace Examination.Application.Commands.V1.Categories.CreateCategory
             itemToAdd = new Category(ObjectId.GenerateNewId().ToString(), request.Name, request.UrlPath);
             await _categoryRepository.InsertAsync(itemToAdd);
             var result = _mapper.Map<Category, CategoryDto>(itemToAdd);
-            return new ApiSuccessResult<CategoryDto>(result);
+            return new ApiSuccessResult<CategoryDto>(200, result);
         }
     }
 }
