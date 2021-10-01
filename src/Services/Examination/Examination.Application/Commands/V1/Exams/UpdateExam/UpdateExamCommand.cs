@@ -2,7 +2,6 @@
 using Examination.Shared.Exams;
 using Examination.Shared.Questions;
 using Examination.Shared.SeedWork;
-using Examination.Shared.SeedWork.Validators;
 using MediatR;
 using System;
 using System.Collections.Generic;
