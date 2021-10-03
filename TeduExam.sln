@@ -82,7 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{4C0B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApp", "src\WebApps\AdminApp\AdminApp.csproj", "{C7DD8827-5DD7-4B29-8475-8226E394D526}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalApp", "src\WebApps\PortalApp\PortalApp.csproj", "{2E39D152-1A85-4112-9310-DBF53FA5BC96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalApp", "src\WebApps\PortalApp\PortalApp.csproj", "{2E39D152-1A85-4112-9310-DBF53FA5BC96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

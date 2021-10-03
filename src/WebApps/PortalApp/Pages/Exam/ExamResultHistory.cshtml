@@ -1,0 +1,164 @@
+﻿@page "/exam-result-histories"
+@model PortalApp.Pages.Exam.ExamResultHistoryModel
+    <!-- ================================
+        START BREADCRUMB AREA
+    ================================= -->
+    <section class="breadcrumb-area pt-5 bg-white pattern-bg">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <div class="media media-card align-items-center">
+                    <div class="media-img media--img media-img-md rounded-full">
+                        <img class="rounded-full lazy" src="/images/img-loading.png" data-src="/images/small-avatar-1.jpg" alt="Student thumbnail image">
+                    </div>
+                    <div class="media-body">
+                        <h2 class="section__title fs-30">Tim Buchalka</h2>
+                        <span class="d-block lh-18 pt-1">Student</span>
+                    </div>
+                </div><!-- end media -->
+            </div><!-- end breadcrumb-content -->
+        </div><!-- end container -->
+        <div class="quiz-action-nav bg-white py-3 shadow-sm mt-50px">
+            <div class="container">
+                <div class="quiz-action-content d-flex flex-wrap align-items-center justify-content-between">
+                    <ul class="quiz-nav d-flex align-items-center">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="my-courses.html">Courses</a></li>
+                        <li><a href="student-detail.html">Profile</a></li>
+                    </ul>
+                    <div class="quiz-nav-btns">
+                        <a href="dashboard-settings.html" class="btn theme-btn theme-btn-transparent mr-2">Setting</a>
+                        <a href="dashboard-profile.html" class="btn theme-btn theme-btn-transparent">Edit Account</a>
+                    </div>
+                </div>
+            </div><!-- end container -->
+        </div><!-- end quiz-action-nav -->
+    </section><!-- end breadcrumb-area -->
+    <!-- ================================
+        END BREADCRUMB AREA
+    ================================= -->
+    <!-- ================================
+           START QUIZ RESULT AREA
+    ================================= -->
+    <section class="quiz-result-area pt-60px pb-60px">
+        <div class="container">
+            <div class="quiz-result-item mb-5">
+                <ul class="quiz-nav pb-4">
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="/images/angular.png" alt="" class="w-50px">
+                            </a>
+                            <p>
+                                <a href="course-details.html" class="fs-22 font-weight-semi-bold">Angular Fundamentals</a><span class="d-block pt-1">View Course</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="list-group">
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Fundamentals of Working with Angular</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Working with the Angular CLI</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Understanding Dependency Injection</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+
+                </div>
+            </div><!-- end quiz-result-item -->
+            <div class="quiz-result-item mb-5">
+                <ul class="quiz-nav pb-4">
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="/images/angular.png" alt="" class="w-50px">
+                            </a>
+                            <p>
+                                <a href="course-details.html" class="fs-22 font-weight-semi-bold">Angular Fundamentals</a><span class="d-block pt-1">View Course</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="list-group">
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Fundamentals of Working with Angular</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Working with the Angular CLI</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+                    <a href="student-quiz-result-details.html" class="list-group-item list-group-item-action d-flex">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-16">Understanding Dependency Injection</h5>
+                            <small class="text-muted">14 min ago</small>
+                        </div>
+                        <div class="text-center">
+                            <span class="d-block lh-20 font-weight-semi-bold mb-n1">4.8</span>
+                            <small class="text-uppercase text-muted">score</small>
+                        </div>
+                    </a>
+
+                </div>
+            </div><!-- end quiz-result-item -->
+            <div class="text-center">
+                <nav aria-label="Page navigation example" class="pagination-box">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <p class="fs-14 pt-2">Showing 1-2 of 4 results</p>
+            </div>
+        </div><!-- end container -->
+    </section><!-- end quiz-result-area -->
+    <!-- ================================
+           START QUIZ RESULT AREA
+    ================================= -->
+ 
