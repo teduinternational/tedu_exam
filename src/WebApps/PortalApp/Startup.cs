@@ -1,18 +1,12 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using PortalApp.Core;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PortalApp
 {
@@ -30,6 +24,7 @@ namespace PortalApp
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
 
             services.AddAuthentication(options =>
             {
@@ -51,6 +46,13 @@ namespace PortalApp
                     options.RequireHttpsMetadata = false;
                     options.SaveTokens = true;
                 });
+
+            services.AddHttpClient("BackendApi", options =>
+            {
+                options.BaseAddress = new Uri(Configuration["BackendApiUrl"]);
+            });
+
+            services.RegisterCustomServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
