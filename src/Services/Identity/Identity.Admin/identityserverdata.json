@@ -130,7 +130,7 @@
           }
         ],
         "RedirectUris": [ "https://localhost:6002/signin-oidc" ],
-        "FrontChannelLogoutUri": "https://localhost:6003/signout-oidc",
+        "FrontChannelLogoutUri": "https://localhost:6002/signout-oidc",
         "PostLogoutRedirectUris": [
           "https://localhost:6002/signout-callback-oidc"
         ],
