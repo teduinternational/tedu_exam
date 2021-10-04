@@ -18,7 +18,7 @@ namespace PortalApp.Services
 
         public async Task<ApiResult<ExamDto>> GetExamByIdAsync(string id)
         {
-            return await GetAsync<ExamDto>($"/api/v1/Exams/{id}");
+            return await GetAsync<ExamDto>($"/api/v1/Exams/{id}", true);
         }
 
         public async Task<ApiResult<PagedList<ExamDto>>> GetExamsPagingAsync(ExamSearch searchInput)
