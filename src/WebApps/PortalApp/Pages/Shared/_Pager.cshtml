@@ -1,0 +1,67 @@
+﻿@model Examination.Shared.SeedWork.PagedListBase
+@{
+    var urlTemplate = Url.Action() + "?pageNumber={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageNumber")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.MetaData.CurrentPage - 5, 1);
+    var finishIndex = Math.Min(Model.MetaData.CurrentPage + 5, Model.MetaData.TotalPages);
+}
+@if (Model.MetaData.TotalPages > 1)
+{
+    <div class="text-center pt-3">
+        <nav aria-label="Page navigation example" class="pagination-box">
+            <ul class="pagination justify-content-center">
+                @if (Model.MetaData.CurrentPage != startIndex)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@urlTemplate.Replace("{0}", Model.MetaData.TotalPages.ToString())" aria-label="Previous">
+                            <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                }
+
+                @for (var i = startIndex; i <= finishIndex; i++)
+                {
+                    if (i == Model.MetaData.CurrentPage)
+                    {
+                        <li class="page-item active"><a class="page-link" href="#">@i</a></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="@urlTemplate.Replace("{0}", i.ToString())">@i</a></li>
+                    }
+                }
+                @if (Model.MetaData.CurrentPage != finishIndex)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@urlTemplate.Replace("{0}", Model.MetaData.TotalPages.ToString())" aria-label="Next">
+                            <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </nav>
+        <p class="fs-14 pt-2">Showing @startIndex-@finishIndex of @Model.MetaData.TotalCount results</p>
+    </div>
+}

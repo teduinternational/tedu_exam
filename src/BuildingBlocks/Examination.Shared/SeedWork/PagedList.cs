@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Examination.Shared.SeedWork
 {
-    public class PagedList<T>
+    public class PagedList<T> : PagedListBase
     {
-        public MetaData MetaData { get; set; }
         public List<T> Items { set; get; }
 
         public PagedList() { }

@@ -48,6 +48,11 @@ namespace PortalApp
                     options.RequireHttpsMetadata = false;
                     options.SaveTokens = true;
                 });
+            services.AddHttpClient("BackendApi", options =>
+            {
+                options.BaseAddress = new Uri(Configuration["BackendApiUrl"]);
+            });
+            services.RegisterCustomServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
