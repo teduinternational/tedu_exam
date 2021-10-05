@@ -1,0 +1,115 @@
+﻿@page "/exam-details/{id}.html"
+@model PortalApp.Pages.Exams.ExamDetailsModel
+<!-- ================================
+    START BREADCRUMB AREA
+================================= -->
+<section class="breadcrumb-area">
+    <div class="bg-white py-3 pattern-bg">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul class="quiz-nav d-flex flex-wrap align-items-center">
+                    <li><a href="/exams.html"><i class="la la-arrow-left mr-2"></i>Back to Exams</a></li>
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="/images/angular.png" alt="Angular thumbnail">
+                            </a>
+                            <p>
+                                <a href="/exam-details/@(Model.Exam.Id).html">@Model.Exam.Name</a><span class="d-block fs-13">@Model.Exam.CategoryName</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div><!-- end breadcrumb-content -->
+        </div><!-- end container -->
+    </div>
+    <div class="bg-dark pt-60px pb-60px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 responsive-column-half">
+                    <div class="quiz-result-content text-center">
+                        <p class="section__desc text-white-50 pb-2">Test Level</p>
+                        <h2 class="section__title text-white">@Model.Exam.Level</h2>
+                    </div>
+                </div><!-- end col-lg-3 -->
+                <div class="col-lg-3 responsive-column-half">
+                    <div class="quiz-result-content text-center">
+                        <p class="section__desc text-white-50 pb-2">Questions</p>
+                        <h2 class="section__title text-white">@Model.Exam.NumberOfQuestions</h2>
+                    </div>
+                </div><!-- end col-lg-3 -->
+                @if (Model.Exam.IsTimeRestricted)
+                {
+                    <div class="col-lg-3 responsive-column-half">
+                        <div class="quiz-result-content text-center">
+                            <p class="section__desc text-white-50 pb-2">Time Allowed</p>
+                            <h2 class="section__title text-white">@Model.Exam.Duration.GetValueOrDefault(0):00m</h2>
+                        </div>
+                    </div><!-- end col-lg-3 -->
+                }
+
+                <div class="col-lg-3 responsive-column-half">
+                    <div class="quiz-result-content text-center">
+                        <a href="#" class="btn theme-btn theme-btn-transparent text-white-50">
+                            <span class="la la-tachometer d-block fs-30 lh-40"></span>
+                            Show Timer
+                        </a>
+                    </div>
+                </div><!-- end col-lg-3 -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div>
+</section><!-- end breadcrumb-area -->
+<!-- ================================
+    END BREADCRUMB AREA
+================================= -->
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
+<section class="quiz-ans-wrap pt-80px pb-80px">
+    <div class="container">
+        <div class="section-heading text-center">
+            <h2 class="section__title">How do you compare?</h2>
+        </div><!-- end section-heading -->
+        <div class="row pt-50px">
+            <div class="col">
+                <div class="quiz-result-content text-center mb-4">
+                    <h2 class="section__title">2</h2>
+                    <p class="section__desc text-black font-weight-semi-bold pt-2">Attempts</p>
+                </div>
+            </div><!-- end col -->
+            <div class="col">
+                <div class="quiz-result-content text-center mb-4">
+                    <h2 class="section__title text-color">67%</h2>
+                    <p class="section__desc text-color font-weight-semi-bold pt-2">Your best result</p>
+                </div>
+            </div><!-- end col -->
+            <div class="col">
+                <div class="quiz-result-content text-center mb-4">
+                    <h2 class="section__title text-color-2">34%</h2>
+                    <p class="section__desc text-color-2 font-weight-semi-bold pt-2">Your average result</p>
+                </div>
+            </div><!-- end col -->
+            <div class="col">
+                <div class="quiz-result-content text-center mb-4">
+                    <h2 class="section__title text-color-3">0%</h2>
+                    <p class="section__desc text-color-3 font-weight-semi-bold pt-2">Your worst result</p>
+                </div>
+            </div><!-- end col -->
+            <div class="col">
+                <div class="quiz-result-content text-center mb-4">
+                    <h2 class="section__title text-color-4">85%</h2>
+                    <p class="section__desc text-color-4 font-weight-semi-bold pt-2">National average result</p>
+                </div>
+            </div><!-- end col -->
+            <div class="col-12">
+                <div class="click-to-start-btn-box text-center pt-3">
+                    <a href="/take-exam.html" class="btn theme-btn">Click to Start Test</a>
+                </div>
+            </div>
+        </div><!-- end row -->
+    </div><!-- end container -->
+</section>
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
