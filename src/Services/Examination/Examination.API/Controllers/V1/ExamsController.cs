@@ -12,10 +12,10 @@ using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Examination.Application.Commands.V1.Exams.StartExam;
 
 namespace Examination.API.Controllers.V1
 {
-
     public class ExamsController : BaseController
     {
         private readonly IMediator _mediator;
@@ -76,7 +76,7 @@ namespace Examination.API.Controllers.V1
                 AutoGenerateQuestion = request.AutoGenerateQuestion,
                 CategoryId = request.CategoryId,
                 Content = request.Content,
-                DurationInMinutes = request.DurationInMinutes,
+                Duration = request.Duration,
                 IsTimeRestricted = request.IsTimeRestricted,
                 Level = request.Level,
                 NumberOfQuestionCorrectForPass = request.NumberOfQuestionCorrectForPass,
@@ -102,7 +102,7 @@ namespace Examination.API.Controllers.V1
                 AutoGenerateQuestion = request.AutoGenerateQuestion,
                 CategoryId = request.CategoryId,
                 Content = request.Content,
-                DurationInMinutes = request.DurationInMinutes,
+                Duration = request.Duration,
                 IsTimeRestricted = request.IsTimeRestricted,
                 Level = request.Level,
                 NumberOfQuestionCorrectForPass = request.NumberOfQuestionCorrectForPass,
@@ -124,6 +124,21 @@ namespace Examination.API.Controllers.V1
             var result = await _mediator.Send(new DeleteExamCommand(id));
 
             _logger.LogInformation("END: DeleteExamAsync");
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("start")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> StartExamAsync([FromBody] StartExamRequest request)
+        {
+            _logger.LogInformation("BEGIN: StartExamAsync");
+            var result = await _mediator.Send(new StartExamCommand()
+            {
+                ExamId = request.ExamId
+            });
+
+            _logger.LogInformation("END: StartExamAsync");
             return StatusCode(result.StatusCode, result);
         }
     }

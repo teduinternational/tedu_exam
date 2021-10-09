@@ -25,9 +25,9 @@
                 <MudTextField Label="Content" Required="true" RequiredError="Content is required"
                               @bind-Value="model.Content" For="@(() => model.Content)" Lines="5" />
 
-                <MudNumericField Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
-                                 @bind-Value="model.DurationInMinutes" For="@(() => model.DurationInMinutes)" />
-
+                <MudTextField Label="Duration (mm:ss)" Required="true" RequiredError="Duration is required"
+                                 @bind-Value="model.Duration" For="@(() => model.Duration)" />
+                
                 <MudNumericField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
                                  @bind-Value="model.NumberOfQuestions" For="@(() => model.NumberOfQuestions)" />
 
@@ -113,7 +113,7 @@
             model.ShortDesc = exam.ShortDesc;
             model.NumberOfQuestionCorrectForPass = exam.NumberOfQuestionCorrectForPass;
             model.NumberOfQuestions = exam.NumberOfQuestions;
-            model.DurationInMinutes = exam.DurationInMinutes;
+            model.Duration = exam.Duration;
             model.IsTimeRestricted = exam.IsTimeRestricted;
             model.Content = exam.Content;
             model.Level = exam.Level;

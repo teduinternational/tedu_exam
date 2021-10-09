@@ -1,0 +1,127 @@
+﻿@page "/take-exam/{examResultId}.html"
+@model PortalApp.Pages.Exams.TakeExamModel
+@section Scripts{
+    <environment include="Development">
+        <script src="~/pages/exams/take_exam.js" asp-append-version="true"></script>
+        <script>
+            var page = new TakeExamPage();
+            page.init();
+        </script>
+    </environment>
+}
+@if (Model.Exam.IsTimeRestricted)
+{
+    var remainingTime = Model.ExamResult.ExamFinishDate.Value.Subtract(DateTime.UtcNow);
+    <input type="hidden" id="hidRemainingTime" value="@remainingTime.ToString("mm"):@remainingTime.ToString("ss")" />
+}
+<input type="hidden" id="hidIsTimeRestricted" value="@(Model.Exam.IsTimeRestricted ? "1" : "0")" />
+<!-- ================================
+    START BREADCRUMB AREA
+================================= -->
+<section class="breadcrumb-area">
+    <div class="bg-white py-3 pattern-bg">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul class="quiz-nav d-flex flex-wrap align-items-center">
+                    <li><a href="course-details.html"><i class="la la-arrow-left mr-2"></i>Back to Exam</a></li>
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="/images/angular.png" alt="Angular thumbnail">
+                            </a>
+                            <p>
+                                <a href="course-details.html">@Model.Exam.Name</a><span class="d-block fs-13">Brad Traversy</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div><!-- end breadcrumb-content -->
+        </div><!-- end container -->
+    </div>
+    <div class="bg-dark pt-60px pb-60px">
+        <div class="container">
+            <ul class="quiz-course-nav d-flex align-items-center justify-content-between">
+                <li>
+                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Introduction">
+                        <i class="la la-check"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Introduction to TypeScript">
+                        <i class="la la-check"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Comparing Angular to AngularJS">
+                        <i class="la la-check"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="student-quiz.html" class="icon-element icon-element-sm text-success" data-toggle="tooltip" data-placement="top" title="Quiz: Getting Started with Angular">
+                        <i class="la la-user"></i>
+                    </a>
+                </li>
+            </ul>
+            <div class="breadcrumb-content pt-40px">
+                <div class="section-heading">
+                    <h2 class="section__title text-white fs-30 pb-2">Question 1 of @Model.Exam.NumberOfQuestions</h2>
+                    <p class="section__desc text-white-50">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus deleniti deserunt dolorum eligendi exercitationem, facere fuga, hic laudantium obcaecati officia omnis qui quia quisquam rem sed sit ullam velit voluptatibus?</p>
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div>
+    <div class="quiz-action-nav bg-white py-3 shadow-sm">
+        <div class="container">
+            <div class="quiz-action-content d-flex flex-wrap align-items-center justify-content-between">
+                <ul class="quiz-nav d-flex align-items-center">
+                    <li><i class="la la-sliders fs-17 mr-2"></i>Choose the correct answer below</li>
+                </ul>
+                <div class="quiz-nav-btns">
+                    @if (Model.Exam.IsTimeRestricted)
+                    {
+                        <span id="countdown" class="mr-2"></span>
+                    }
+                    <a href="student-quiz-result-details.html" class="btn theme-btn theme-btn-transparent mr-2">Skip Quiz</a>
+                    <a href="student-quiz-result-details.html" class="btn theme-btn">Next Question <i class="la la-angle-right icon ml-1"></i></a>
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div><!-- end quiz-action-nav -->
+</section><!-- end breadcrumb-area -->
+<!-- ================================
+    END BREADCRUMB AREA
+================================= -->
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
+<section class="quiz-ans-wrap pt-60px pb-60px">
+    <div class="container">
+        <div class="quiz-ans-content">
+            <h3 class="fs-22 font-weight-semi-bold">Your Answer:</h3>
+            <div class="quiz-ans-list py-3">
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox" required>
+                    <label class="custom-control-label custom--control-label" for="quizAnsCheckbox">
+                        Ability to use newer syntax and offers reliability
+                    </label>
+                </div><!-- end custom-control -->
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox2" required checked>
+                    <label class="custom-control-label custom--control-label" for="quizAnsCheckbox2">
+                        Compatibility
+                    </label>
+                </div><!-- end custom-control -->
+                <div class="custom-control custom-checkbox mb-1">
+                    <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox3" required>
+                    <label class="custom-control-label custom--control-label" for="quizAnsCheckbox3">
+                        Usage of missing features
+                    </label>
+                </div><!-- end custom-control -->
+            </div><!-- end quiz-ans-list -->
+            <p class="fs-15"><strong class="font-weight-semi-bold text-black">Note:</strong> There can be multiple correct answers to this question.</p>
+        </div>
+    </div><!-- end container -->
+</section>
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->

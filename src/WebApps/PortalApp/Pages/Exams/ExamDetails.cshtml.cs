@@ -32,5 +32,18 @@ namespace PortalApp.Pages.Exams
             Exam = result.ResultObj;
             return Page();
         }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var result = await _examService.StartExamAsync(new StartExamRequest()
+            {
+                ExamId = Exam.Id
+            });
+            if (result.IsSuccessed)
+            {
+                return Redirect($"/take-exam/{result.ResultObj.Id}.html");
+            }
+            return Page();
+        }
     }
 }

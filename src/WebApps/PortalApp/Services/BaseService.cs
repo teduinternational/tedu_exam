@@ -32,7 +32,10 @@ namespace PortalApp.Services
                     var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 }
-                return await client.GetFromJsonAsync<ApiResult<T>>(url);
+                return await client.GetFromJsonAsync<ApiResult<T>>(url, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
             }
         }
 
@@ -56,7 +59,10 @@ namespace PortalApp.Services
 
             if (response.IsSuccessStatusCode)
             {
-                return JsonSerializer.Deserialize<ApiResult<TResponse>>(body);
+                return JsonSerializer.Deserialize<ApiResult<TResponse>>(body, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
             }
             throw new Exception(body);
         }

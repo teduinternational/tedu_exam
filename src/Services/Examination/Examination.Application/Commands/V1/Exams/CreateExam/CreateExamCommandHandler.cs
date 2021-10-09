@@ -9,10 +9,8 @@ using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,12 +57,13 @@ namespace Examination.Application.Commands.V1.Exams.CreateExam
 
             var category = await _categoryRepository.GetCategoriesByIdAsync(request.CategoryId);
             var currentUserId = _httpContextAccessor.GetUserId();
+
             var itemToAdd = new Exam(
                 request.Name,
                 request.ShortDesc,
                 request.Content,
                 request.NumberOfQuestions,
-                request.DurationInMinutes,
+                request.Duration,
                 questions,
                 request.Level,
                 currentUserId,

@@ -1,4 +1,5 @@
-﻿using Examination.Shared.Exams;
+﻿using Examination.Shared.ExamResults;
+using Examination.Shared.Exams;
 using Examination.Shared.SeedWork;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace PortalApp.Services.Interfaces
     {
         Task<ApiResult<PagedList<ExamDto>>> GetExamsPagingAsync(ExamSearch search);
         Task<ApiResult<ExamDto>> GetExamByIdAsync(string id);
+        Task<ApiResult<ExamResultDto>> StartExamAsync(StartExamRequest request);
     }
 }

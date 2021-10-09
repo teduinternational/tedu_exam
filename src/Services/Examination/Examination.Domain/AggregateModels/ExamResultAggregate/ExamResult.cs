@@ -32,26 +32,6 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
         [BsonElement("finished")]
         public bool Finished { get; set; }
 
-        public static ExamResult CreateNewResult(string userId, string examId)
-        {
-            var result = new ExamResult(userId, examId);
-            return result;
-        }
-
-        public void StartExam(string firstName, string lastName)
-        {
-            this.AddDomainEvent(new ExamStartedDomainEvent(UserId, firstName, lastName));
-        }
-
-        public void SetUserChoices(List<ExamResultDetail> examResultDetails)
-        {
-            ExamResultDetails = examResultDetails;
-        }
-
-        public void Finish()
-        {
-            Finished = true;
-            ExamFinishDate = DateTime.Now;
-        }
+      
     }
 }
