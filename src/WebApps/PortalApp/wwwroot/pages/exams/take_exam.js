@@ -1,11 +1,12 @@
 ﻿var TakeExamPage = function () {
     this.init = function () {
         initializeTimer();
+        loadQuestion();
     }
 
     function initializeTimer() {
         var remainingTime = $('#hidRemainingTime').val();
-        var isTimeRestricted = $("hidIsTimeRestricted").val();
+        var isTimeRestricted = $("#hidIsTimeRestricted").val();
         if (isTimeRestricted === "1") {
             var interval = setInterval(function () {
                 var timer = remainingTime.split(':');
@@ -22,6 +23,15 @@
                 remainingTime = minutes + ':' + seconds;
             }, 1000);
         }
+    }
 
+    function loadQuestion() {
+        var index = $('#hidCurrentQuestionIndex').val();
+        var examId = $('#hidExamId').val();
+        $.get("/take-exam.html?handler=Question&examId=" + examId+"&questionIndex=" + index)
+            .done((res) => {
+                $('#lblQuestionContent').text(res.content);
+                $('#lblCurrentQuestion').text((parseInt(index) + 1).toString());
+        });
     }
 }

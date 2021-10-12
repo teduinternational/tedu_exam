@@ -1,4 +1,4 @@
-﻿@page "/exam-details/{id}.html"
+﻿@page "/exam-details.html"
 @model PortalApp.Pages.Exams.ExamDetailsModel
 <!-- ================================
     START BREADCRUMB AREA
@@ -15,7 +15,7 @@
                                 <img src="/images/angular.png" alt="Angular thumbnail">
                             </a>
                             <p>
-                                <a href="/exam-details/@(Model.Exam.Id).html">@Model.Exam.Name</a><span class="d-block fs-13">@Model.Exam.CategoryName</span>
+                                <a href="/exam-details.html?id=@(Model.Exam.Id)">@Model.Exam.Name</a><span class="d-block fs-13">@Model.Exam.CategoryName</span>
                             </p>
                         </div>
                     </li>

@@ -1,4 +1,4 @@
-﻿@page "/take-exam/{examResultId}.html"
+﻿@page "/take-exam.html"
 @model PortalApp.Pages.Exams.TakeExamModel
 @section Scripts{
     <environment include="Development">
@@ -15,6 +15,9 @@
     <input type="hidden" id="hidRemainingTime" value="@remainingTime.ToString("mm"):@remainingTime.ToString("ss")" />
 }
 <input type="hidden" id="hidIsTimeRestricted" value="@(Model.Exam.IsTimeRestricted ? "1" : "0")" />
+<input type="hidden" id="hidCurrentQuestionIndex" value="0" />
+<input type="hidden" id="hidExamId" value="@Model.Exam.Id" />
+
 <!-- ================================
     START BREADCRUMB AREA
 ================================= -->
@@ -41,31 +44,19 @@
     <div class="bg-dark pt-60px pb-60px">
         <div class="container">
             <ul class="quiz-course-nav d-flex align-items-center justify-content-between">
-                <li>
-                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Introduction">
-                        <i class="la la-check"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Introduction to TypeScript">
-                        <i class="la la-check"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="course-details.html" class="icon-element icon-element-sm" data-toggle="tooltip" data-placement="top" title="Getting Started with Angular: Comparing Angular to AngularJS">
-                        <i class="la la-check"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="student-quiz.html" class="icon-element icon-element-sm text-success" data-toggle="tooltip" data-placement="top" title="Quiz: Getting Started with Angular">
-                        <i class="la la-user"></i>
-                    </a>
-                </li>
+                @for (int index = 0; index < Model.Exam.Questions.Count; index++)
+                {
+                    <li>
+                        <a href="#" class="icon-element icon-element-sm">
+                            @(index+1)
+                        </a>
+                    </li>
+                }
             </ul>
             <div class="breadcrumb-content pt-40px">
                 <div class="section-heading">
-                    <h2 class="section__title text-white fs-30 pb-2">Question 1 of @Model.Exam.NumberOfQuestions</h2>
-                    <p class="section__desc text-white-50">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus deleniti deserunt dolorum eligendi exercitationem, facere fuga, hic laudantium obcaecati officia omnis qui quia quisquam rem sed sit ullam velit voluptatibus?</p>
+                    <h2 class="section__title text-white fs-30 pb-2">Question <span id="lblCurrentQuestion"></span> of @Model.Exam.NumberOfQuestions</h2>
+                    <p class="section__desc text-white-50" id="lblQuestionContent"></p>
                 </div>
             </div>
         </div><!-- end container -->
@@ -81,8 +72,8 @@
                     {
                         <span id="countdown" class="mr-2"></span>
                     }
-                    <a href="student-quiz-result-details.html" class="btn theme-btn theme-btn-transparent mr-2">Skip Quiz</a>
-                    <a href="student-quiz-result-details.html" class="btn theme-btn">Next Question <i class="la la-angle-right icon ml-1"></i></a>
+                    <button type="button" class="btn theme-btn theme-btn-transparent mr-2">Skip Quiz</button>
+                    <button id="btnNextQuestion" type="button" class="btn theme-btn">Next Question <i class="la la-angle-right icon ml-1"></i></button>
                 </div>
             </div>
         </div><!-- end container -->
@@ -98,25 +89,14 @@
     <div class="container">
         <div class="quiz-ans-content">
             <h3 class="fs-22 font-weight-semi-bold">Your Answer:</h3>
-            <div class="quiz-ans-list py-3">
+            <div class="quiz-ans-list py-3" id="divAnswers">
                 <div class="custom-control custom-checkbox mb-1">
                     <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox" required>
                     <label class="custom-control-label custom--control-label" for="quizAnsCheckbox">
                         Ability to use newer syntax and offers reliability
                     </label>
                 </div><!-- end custom-control -->
-                <div class="custom-control custom-checkbox mb-1">
-                    <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox2" required checked>
-                    <label class="custom-control-label custom--control-label" for="quizAnsCheckbox2">
-                        Compatibility
-                    </label>
-                </div><!-- end custom-control -->
-                <div class="custom-control custom-checkbox mb-1">
-                    <input type="checkbox" class="custom-control-input" id="quizAnsCheckbox3" required>
-                    <label class="custom-control-label custom--control-label" for="quizAnsCheckbox3">
-                        Usage of missing features
-                    </label>
-                </div><!-- end custom-control -->
+
             </div><!-- end quiz-ans-list -->
             <p class="fs-15"><strong class="font-weight-semi-bold text-black">Note:</strong> There can be multiple correct answers to this question.</p>
         </div>

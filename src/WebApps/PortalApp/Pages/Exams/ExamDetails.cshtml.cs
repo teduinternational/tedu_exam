@@ -41,7 +41,7 @@ namespace PortalApp.Pages.Exams
             });
             if (result.IsSuccessed)
             {
-                return Redirect($"/take-exam/{result.ResultObj.Id}.html");
+                return Redirect($"/take-exam.html?examResultId={result.ResultObj.Id}");
             }
             return Page();
         }
