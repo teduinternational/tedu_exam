@@ -36,27 +36,27 @@ namespace Examination.API.Controllers.V1
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("finish/{id}")]
+        [HttpPost("finish")]
         [ProducesResponseType(typeof(ApiSuccessResult<ExamResultDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> FinishExamAsync(string id)
+        public async Task<IActionResult> FinishExamAsync(FinishExamRequest request)
         {
             _logger.LogInformation("BEGIN: FinishExamAsync");
 
-            var result = await _mediator.Send(new FinishExamCommand() { ExamResultId = id });
+            var result = await _mediator.Send(new FinishExamCommand() { ExamResultId = request.ExamResultId });
 
             _logger.LogInformation("END: FinishExamAsync");
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPut("skip/{id}")]
+        [HttpPut("skip")]
         [ProducesResponseType(typeof(ApiSuccessResult<bool>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> SkipExamAsync(string id)
+        public async Task<IActionResult> SkipExamAsync(SkipExamRequest request)
         {
             _logger.LogInformation("BEGIN: SkipExamAsync");
 
-            var result = await _mediator.Send(new SkipExamCommand() { ExamResultId = id });
+            var result = await _mediator.Send(new SkipExamCommand() { ExamResultId = request.ExamResultId });
 
             _logger.LogInformation("END: SkipExamAsync");
             return StatusCode(result.StatusCode, result);

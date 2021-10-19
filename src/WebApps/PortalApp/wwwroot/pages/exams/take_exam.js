@@ -17,6 +17,7 @@
                 var id = $(this).prop('id');
                 answerIds.push(id);
             });
+           
             $.ajax({
                 url: '/take-exam.html?handler=NextQuestion',
                 data: JSON.stringify({
@@ -32,7 +33,8 @@
                 },
                 success: function (res) {
                     if (currentQuestionIndex == lastQuestionIndex) {
-                        $('#btnSubmitExam').show();
+                        $('#btnFinishExam').show();
+                        return;
                     }
                     var nextQuestionIndex = currentQuestionIndex + 1;
                     $('#hidCurrentQuestionIndex').val(nextQuestionIndex);
@@ -72,7 +74,7 @@
                 }),
                 contentType: 'application/json'
             }).done(function (res) {
-                window.location.href = "/exam-result.html?"
+                window.location.href = "/exam-result.html?examResultId=" + resultId;
             });
         });
 
@@ -108,7 +110,7 @@
 
     function loadQuestion(index) {
         var examResultId = $('#hidExamResultId').val();
-        $.get("/take-exam.html?handler=Question&examId=" + examResultId + "&questionIndex=" + index)
+        $.get("/take-exam.html?handler=Question&examResultId=" + examResultId + "&questionIndex=" + index)
             .done((res) => {
                 $('#lblQuestionContent').text(res.content);
                 $('#hidCurrentQuestionId').val(res.id);
@@ -125,21 +127,21 @@
                     if (res.questionType === 1) {
                         html += `<div>
                                         <label for="`+ item.id + `">
-                                            <input type="radio" class="answer-item" name="`+ res.id + `" id="` + item.id + `" required>
+                                            <input type="radio" `+ (item.userChoosen == true ? 'checked': '') + ` class="answer-item" name="` + res.id + `" id="` + item.id + `" required>
                                             `+ item.content + `
                                         </label>
                                     </div>`;
-                    } else {
-                        html += `<div class="custom-control custom-checkbox mb-1">
-                                        <input type="checkbox" class="custom-control-input answer-item" id="`+ item.id + `" required>
+            } else {
+                html += `<div class="custom-control custom-checkbox mb-1">
+                                        <input type="checkbox" `+ (item.userChoosen == true ? 'checked' : '') + ` class="custom-control-input answer-item" id="`+ item.id + `" required>
                                         <label class="custom-control-label custom--control-label" for="`+ item.id + `">
                                             `+ item.content + `
                                         </label>
                                     </div>`;
-                    }
+    }
 
-                });
-                $('#divAnswers').html(html);
+});
+$('#divAnswers').html(html);
             });
     }
 }

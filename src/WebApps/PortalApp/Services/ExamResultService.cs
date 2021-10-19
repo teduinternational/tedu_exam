@@ -17,9 +17,10 @@ namespace PortalApp.Services
         {
         }
 
-        public Task<ApiResult<bool>> FinishExamAsync(FinishExamRequest request)
+        public async Task<ApiResult<ExamResultDto>> FinishExamAsync(FinishExamRequest request)
         {
-            throw new System.NotImplementedException();
+            return await PostAsync<FinishExamRequest, ExamResultDto>("/api/v1/ExamResults/finish", request, true);
+
         }
 
         public async Task<ApiResult<ExamResultDto>> GetExamResultByIdAsync(string id)
@@ -32,9 +33,10 @@ namespace PortalApp.Services
             return await PostAsync<NextQuestionRequest, ExamResultDto>("/api/v1/ExamResults/next-question", request, true);
         }
 
-        public Task<ApiResult<bool>> SkipExamAsync(SkipExamRequest request)
+        public async Task<ApiResult<bool>> SkipExamAsync(SkipExamRequest request)
         {
-            throw new System.NotImplementedException();
+            return await PutAsync<SkipExamRequest, bool>("/api/v1/ExamResults/skip", request, true);
+
         }
     }
 }
