@@ -1,4 +1,4 @@
-﻿@page "/exam-details/{id}.html"
+﻿@page "/exam-details.html"
 @model PortalApp.Pages.Exams.ExamDetailsModel
 <!-- ================================
     START BREADCRUMB AREA
@@ -15,7 +15,7 @@
                                 <img src="/images/angular.png" alt="Angular thumbnail">
                             </a>
                             <p>
-                                <a href="/exam-details/@(Model.Exam.Id).html">@Model.Exam.Name</a><span class="d-block fs-13">@Model.Exam.CategoryName</span>
+                                <a href="/exam-details.html?id=@(Model.Exam.Id)">@Model.Exam.Name</a><span class="d-block fs-13">@Model.Exam.CategoryName</span>
                             </p>
                         </div>
                     </li>
@@ -43,7 +43,7 @@
                     <div class="col-lg-3 responsive-column-half">
                         <div class="quiz-result-content text-center">
                             <p class="section__desc text-white-50 pb-2">Time Allowed</p>
-                            <h2 class="section__title text-white">@Model.Exam.Duration.GetValueOrDefault(0):00m</h2>
+                            <h2 class="section__title text-white">@Model.Exam.Duration</h2>
                         </div>
                     </div><!-- end col-lg-3 -->
                 }
@@ -104,7 +104,9 @@
             </div><!-- end col -->
             <div class="col-12">
                 <div class="click-to-start-btn-box text-center pt-3">
-                    <a href="/take-exam.html" class="btn theme-btn">Click to Start Test</a>
+                    <form method="post">
+                        <button class="btn theme-btn" type="submit">Take exam</button>
+                    </form>
                 </div>
             </div>
         </div><!-- end row -->

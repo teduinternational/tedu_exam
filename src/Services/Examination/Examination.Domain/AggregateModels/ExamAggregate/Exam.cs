@@ -10,7 +10,7 @@ namespace Examination.Domain.AggregateModels.ExamAggregate
 {
     public class Exam : Entity, IAggregateRoot
     {
-        public Exam(string name, string shortDesc, string content, int numberOfQuestions, int? durationInMinutes,
+        public Exam(string name, string shortDesc, string content, int numberOfQuestions, string duration,
             List<Question> questions, Level level, string ownerUserId, int numberOfQuestionCorrectForPass,
             bool isTimeRestricted, string categoryId, string categoryName)
         {
@@ -25,9 +25,9 @@ namespace Examination.Domain.AggregateModels.ExamAggregate
 
 
             (Name, ShortDesc, Content, NumberOfQuestions,
-                    DurationInMinutes, Questions, Level, DateCreated, OwnerUserId, NumberOfQuestionCorrectForPass,
+                    Duration, Questions, Level, DateCreated, OwnerUserId, NumberOfQuestionCorrectForPass,
                     IsTimeRestricted, CategoryId, CategoryName)
-                = (name, shortDesc, content, numberOfQuestions, durationInMinutes, questions, level, DateTime.UtcNow,
+                = (name, shortDesc, content, numberOfQuestions, duration, questions, level, DateTime.UtcNow,
                     ownerUserId,
                     numberOfQuestionCorrectForPass, isTimeRestricted, categoryId, categoryName);
         }
@@ -57,8 +57,8 @@ namespace Examination.Domain.AggregateModels.ExamAggregate
         [BsonElement("numberOfQuestions")]
         public int NumberOfQuestions { get; set; }
 
-        [BsonElement("durationInMinutes")]
-        public int? DurationInMinutes { get; set; }
+        [BsonElement("duration")]
+        public string Duration { get; set; } //10:00
 
         [BsonElement("questions")]
         public List<Question> Questions { get; set; }

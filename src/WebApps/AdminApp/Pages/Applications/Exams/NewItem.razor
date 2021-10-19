@@ -25,8 +25,8 @@
                 <MudTextField Label="Content" Required="true" RequiredError="Content is required" Lines="5"
                               @bind-Value="model.Content" For="@(() => model.Content)" />
 
-                <MudNumericField Label="Number of minutes" Required="true" RequiredError="Number minutes is required"
-                                 @bind-Value="model.DurationInMinutes" For="@(() => model.DurationInMinutes)" />
+                <MudTextField Label="Duration (mm:ss)" Required="true" RequiredError="Duration is required"
+                              @bind-Value="model.Duration" For="@(() => model.Duration)" />
 
                 <MudNumericField Label="Number of questions" Required="true" RequiredError="Number of questions is required"
                                  @bind-Value="model.NumberOfQuestions" For="@(() => model.NumberOfQuestions)" />

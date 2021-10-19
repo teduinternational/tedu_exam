@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,22 @@ namespace PortalApp
                 {
                     options.Cookie.Name = Configuration["IdentityServerConfig:CookieName"];
                     options.LoginPath = "/login.html";
+                    options.Events = new CookieAuthenticationEvents()
+                    {
+                        OnValidatePrincipal = context =>
+                        {
+                            if (context.Properties.Items.ContainsKey(".Token.expires_at"))
+                            {
+                                var expire = DateTime.Parse(context.Properties.Items[".Token.expires_at"]);
+                                if (expire < DateTime.Now)
+                                {
+                                    context.ShouldRenew = true;
+                                    context.RejectPrincipal();
+                                }
+                            }
+                            return Task.FromResult(0);
+                        }
+                    };
                 })
                 .AddOpenIdConnect(AuthenticationConsts.OidcAuthenticationScheme, options =>
                 {

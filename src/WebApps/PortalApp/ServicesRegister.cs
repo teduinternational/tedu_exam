@@ -14,6 +14,7 @@ namespace PortalApp
         {
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IExamService, ExamService>();
+            services.AddTransient<IExamResultService, ExamResultService>();
         }
     }
 }

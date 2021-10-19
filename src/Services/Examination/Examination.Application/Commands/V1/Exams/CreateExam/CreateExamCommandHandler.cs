@@ -64,7 +64,7 @@ namespace Examination.Application.Commands.V1.Exams.CreateExam
                 request.ShortDesc,
                 request.Content,
                 request.NumberOfQuestions,
-                request.DurationInMinutes,
+                request.Duration,
                 questions,
                 request.Level,
                 currentUserId,

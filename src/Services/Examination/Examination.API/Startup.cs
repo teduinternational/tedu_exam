@@ -156,6 +156,7 @@ namespace Examination.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
+                    c.OAuthClientId("exam_api_swaggerui");
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Examination.API v1");
                     c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
                 });
