@@ -9,6 +9,7 @@ namespace Examination.Domain.AggregateModels.QuestionAggregate
 {
     public class Question : Entity, IAggregateRoot
     {
+        public Question() { }
         public Question(string id, string content, QuestionType questionType, Level level, string categoryId,
             List<Answer> answers, string explain,  string ownerUserId = null, string categoryName = null)
         {

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using PortalApp.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Examination.Shared.ExamResults;
 
 namespace PortalApp.Services
 {
@@ -39,6 +40,11 @@ namespace PortalApp.Services
 
             var result = await GetAsync<PagedList<ExamDto>>(url, true);
             return result;
+        }
+
+        public async Task<ApiResult<ExamResultDto>> StartExamAsync(StartExamRequest request)
+        {
+            return await PostAsync<StartExamRequest, ExamResultDto>("/api/v1/Exams/start", request,true);
         }
     }
 }
