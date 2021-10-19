@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Examination.Shared.ExamResults
 {
-    public class ExamResultDetailDto
+    public class AnswerResultDto
     {
-        public QuestionDto Question { get; set; }
-        public IEnumerable<AnswerDto> SelectedAnswers { get; set; }
-        public bool IsCorrect { get; set; }
+        public string Id { get; set; }
+        public string Content { get; set; }
+        public bool? UserChoosen { get; set; }
     }
 }

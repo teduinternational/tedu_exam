@@ -13,7 +13,7 @@ namespace Examination.Shared.ExamResults
 
         public string UserId { set; get; }
 
-        public List<ExamResultDetailDto> ExamResultDetails { get; set; }
+        public List<QuestionResultDto> QuestionResults { get; set; }
 
         public DateTime ExamStartDate { get; set; }
 

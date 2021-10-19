@@ -71,6 +71,7 @@ namespace PortalApp
                 options.BaseAddress = new Uri(Configuration["BackendApiUrl"]);
             });
             services.RegisterCustomServices();
+            services.AddAntiforgery(o => o.HeaderName = "CSRF-TOKEN");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

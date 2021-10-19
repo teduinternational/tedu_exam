@@ -19,7 +19,8 @@ namespace Examination.Application.Mapping
             CreateMap<Question, QuestionDto>().ReverseMap();
             CreateMap<Answer, AnswerDto>().ReverseMap();
             CreateMap<ExamResult, ExamResultDto>().ReverseMap();
-            CreateMap<ExamResultDetail, ExamResultDetailDto>().ReverseMap();
+            CreateMap<QuestionResult, QuestionResultDto>().ReverseMap();
+            CreateMap<AnswerResult, AnswerResultDto>().ReverseMap();
         }
     }
 }

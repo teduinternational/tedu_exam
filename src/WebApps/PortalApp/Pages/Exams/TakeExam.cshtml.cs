@@ -8,6 +8,7 @@ using PortalApp.Services.Interfaces;
 
 namespace PortalApp.Pages.Exams
 {
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class TakeExamModel : PageModel
     {
         private readonly IExamResultService _examResultService;
@@ -36,12 +37,42 @@ namespace PortalApp.Pages.Exams
             }
         }
 
-        public async Task<IActionResult> OnGetQuestion(string examId, int questionIndex)
+        public async Task<IActionResult> OnGetQuestion(string examResultId, int questionIndex)
         {
-            var exam = await _examService.GetExamByIdAsync(examId);
+            var examResult = await _examResultService.GetExamResultByIdAsync(examResultId);
+            if (examResult.IsSuccessed)
+            {
+                return new JsonResult(examResult.ResultObj.QuestionResults[questionIndex]);
+            }
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> OnPostSkipExamAsync([FromBody] SkipExamRequest request)
+        {
+            var exam = await _examResultService.SkipExamAsync(request);
             if (exam.IsSuccessed)
             {
-                return new JsonResult(exam.ResultObj.Questions[questionIndex]);
+                return new JsonResult(exam);
+            }
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> OnPostFinishExamAsync([FromBody] FinishExamRequest request)
+        {
+            var exam = await _examResultService.FinishExamAsync(request);
+            if (exam.IsSuccessed)
+            {
+                return new JsonResult(exam);
+            }
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> OnPostNextQuestionAsync([FromBody] NextQuestionRequest request)
+        {
+            var exam = await _examResultService.NextQuestionAsync(request);
+            if (exam.IsSuccessed)
+            {
+                return new JsonResult(exam);
             }
             return BadRequest();
         }

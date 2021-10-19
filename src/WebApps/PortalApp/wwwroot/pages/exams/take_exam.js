@@ -1,10 +1,91 @@
 ﻿var TakeExamPage = function () {
     this.init = function () {
-        initializeTimer();
-        loadQuestion();
+        initTimer();
+        var index = $('#hidCurrentQuestionIndex').val();
+        loadQuestion(index);
+        registerEvents();
     }
 
-    function initializeTimer() {
+    function registerEvents() {
+        $('body').on('click', '#btnNextQuestion', function () {
+            var resultId = $('#hidExamResultId').val();
+            var questionId = $('#hidCurrentQuestionId').val();
+            var currentQuestionIndex = parseInt($('#hidCurrentQuestionIndex').val());
+            var lastQuestionIndex = parseInt($('#hidLastQuestionIndex').val());
+            var answerIds = [];
+            $('.answer-item:checked').each(function () {
+                var id = $(this).prop('id');
+                answerIds.push(id);
+            });
+            $.ajax({
+                url: '/take-exam.html?handler=NextQuestion',
+                data: JSON.stringify({
+                    examResultId: resultId,
+                    questionId: questionId,
+                    answerIds: answerIds
+                }),
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (res) {
+                    if (currentQuestionIndex == lastQuestionIndex) {
+                        $('#btnSubmitExam').show();
+                    }
+                    var nextQuestionIndex = currentQuestionIndex + 1;
+                    $('#hidCurrentQuestionIndex').val(nextQuestionIndex);
+                    loadQuestion(nextQuestionIndex);
+
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        });
+
+        $('body').on('click', '#btnSkipExam', function () {
+            var resultId = $('#hidExamResultId').val();
+            $.ajax({
+                url: '/take-exam.html?handler=SkipExam',
+                type: 'POST',
+                data: JSON.stringify({
+                    examResultId: resultId
+                }),
+                contentType: 'application/json',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                }
+            }).done(function (res) {
+                console.log(res);
+            });
+        });
+
+        $('body').on('click', '#btnFinishExam', function () {
+            var resultId = $('#hidExamResultId').val();
+            $.ajax({
+                url: '/take-exam.html?handler=FinishExam',
+                type: 'POST',
+                data: JSON.stringify({
+                    examResultId: resultId
+                }),
+                contentType: 'application/json'
+            }).done(function (res) {
+                window.location.href = "/exam-result.html?"
+            });
+        });
+
+        $('body').on('click', '.navigate-question', function () {
+            var index = $(this).data('index');
+            $('#hidCurrentQuestionIndex').val(index);
+            $('.navigate-question').removeClass("active-question");
+            $(this).addClass('active-question');
+            loadQuestion(index)
+        });
+    }
+
+    function initTimer() {
         var remainingTime = $('#hidRemainingTime').val();
         var isTimeRestricted = $("#hidIsTimeRestricted").val();
         if (isTimeRestricted === "1") {
@@ -25,13 +106,40 @@
         }
     }
 
-    function loadQuestion() {
-        var index = $('#hidCurrentQuestionIndex').val();
-        var examId = $('#hidExamId').val();
-        $.get("/take-exam.html?handler=Question&examId=" + examId+"&questionIndex=" + index)
+    function loadQuestion(index) {
+        var examResultId = $('#hidExamResultId').val();
+        $.get("/take-exam.html?handler=Question&examId=" + examResultId + "&questionIndex=" + index)
             .done((res) => {
                 $('#lblQuestionContent').text(res.content);
+                $('#hidCurrentQuestionId').val(res.id);
                 $('#lblCurrentQuestion').text((parseInt(index) + 1).toString());
-        });
+                var html = '';
+                if (res.questionType == 2) {
+                    $('#lblNote').html(`<strong class="font-weight-semi-bold text-black">Note:</strong> There can be multiple correct answers to this question.`);
+                    $('#lblNote').show();
+                }
+                else {
+                    $('#lblNote').hide();
+                }
+                $.each(res.answers, function (index, item) {
+                    if (res.questionType === 1) {
+                        html += `<div>
+                                        <label for="`+ item.id + `">
+                                            <input type="radio" class="answer-item" name="`+ res.id + `" id="` + item.id + `" required>
+                                            `+ item.content + `
+                                        </label>
+                                    </div>`;
+                    } else {
+                        html += `<div class="custom-control custom-checkbox mb-1">
+                                        <input type="checkbox" class="custom-control-input answer-item" id="`+ item.id + `" required>
+                                        <label class="custom-control-label custom--control-label" for="`+ item.id + `">
+                                            `+ item.content + `
+                                        </label>
+                                    </div>`;
+                    }
+
+                });
+                $('#divAnswers').html(html);
+            });
     }
 }

@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Examination.Application.Extensions;
 using Examination.Domain.AggregateModels.ExamAggregate;
 using Examination.Domain.AggregateModels.ExamResultAggregate;
+using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Shared.ExamResults;
 using Examination.Shared.SeedWork;
 using MediatR;
@@ -38,10 +41,19 @@ namespace Examination.Application.Commands.V1.Exams.StartExam
             if (exam.IsTimeRestricted)
             {
                 var durations = exam.Duration.Split(":");
-                var durationTimeSpan = new TimeSpan(0,int.Parse(durations[0]), int.Parse(durations[1]));
+                var durationTimeSpan = new TimeSpan(0, int.Parse(durations[0]), int.Parse(durations[1]));
                 examResult.ExamFinishDate = DateTime.UtcNow.Add(durationTimeSpan);
             }
-            
+            examResult.CorrectQuestionCount = 0;
+            examResult.QuestionResults = exam.Questions
+                    .Select(x => new QuestionResult(x.Id,
+                    x.Content,
+                    x.QuestionType,
+                    x.Level,
+                    x.Answers.Select(a => new AnswerResult(a.Id, a.Content, null)).ToList(),
+                    x.Explain,
+                    null))
+                .ToList(); ;
             examResult.Finished = false;
 
             await _examResultRepository.InsertAsync(examResult);
