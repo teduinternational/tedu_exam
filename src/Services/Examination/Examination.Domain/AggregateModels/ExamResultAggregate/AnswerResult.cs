@@ -6,11 +6,12 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
     public class AnswerResult : Entity
     {
         public AnswerResult() { }
-        public AnswerResult(string id, string content, bool? userChosen)
+        public AnswerResult(string id, string content, bool? userChosen, bool isCorrect)
         {
             Id = id;
             UserChosen = userChosen;
             Content = content;
+            IsCorrect = isCorrect;
         }
 
         [BsonElement("content")]
@@ -18,5 +19,8 @@ namespace Examination.Domain.AggregateModels.ExamResultAggregate
 
         [BsonElement("userChosen")]
         public bool? UserChosen { get; set; }
+
+        [BsonElement("isCorrect")]
+        public bool IsCorrect { get; set; }
     }
 }

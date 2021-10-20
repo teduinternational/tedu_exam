@@ -1,4 +1,104 @@
 ﻿@page "/exam-result.html"
 @model PortalApp.Pages.Exams.ExamResultModel
-@{
-}
+<!-- ================================
+    START BREADCRUMB AREA
+================================= -->
+<section class="breadcrumb-area">
+    <div class="bg-white py-3 pattern-bg">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul class="quiz-nav d-flex flex-wrap align-items-center">
+                    <li><a href="course-details.html"><i class="la la-arrow-left mr-2"></i>Back to Course</a></li>
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="images/angular.png" alt="Angular thumbnail">
+                            </a>
+                            <p>
+                                <a href="course-details.html">Angular Fundamentals</a><span class="d-block fs-13">Brad Traversy</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div><!-- end breadcrumb-content -->
+        </div><!-- end container -->
+    </div>
+    <div class="bg-dark pt-60px pb-60px">
+        <div class="container">
+            <div class="breadcrumb-content text-center">
+                <div class="section-heading">
+                    <p class="section__desc text-white-50">Submitted on @Model.ExamResult.ExamFinishDate</p>
+                    <h2 class="section__title text-white pt-2">Your result is: @(Model.ExamResult.Passed == true ? "Passed" : "Failed")</h2>
+                </div>
+                <div class="breadcrumb-btn-box pt-30px">
+                    <a href="/exam-details.html?id=@Model.Exam.Id" class="btn theme-btn theme-btn-transparent text-white-50 mr-2 mb-2">Restart Quiz</a>
+                    <a href="/exams-histories.html" class="btn theme-btn theme-btn-transparent text-white-50 mb-2">View Attended Quiz</a>
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div>
+    <div class="quiz-action-nav bg-white py-3 shadow-sm">
+        <div class="container">
+            <div class="quiz-action-content d-flex flex-wrap align-items-center justify-content-between">
+                <ul class="quiz-nav d-flex flex-wrap align-items-center">
+                    <li><i class="la la-check-circle fs-17 mr-2"></i>@Model.ExamResult.QuestionResults.Count(x => x.Result == true)/@Model.ExamResult.QuestionResults.Count Score</li>
+                    <li><i class="la la-clock fs-17 mr-2"></i>@Model.Exam.Duration minutes</li>
+                    <li><i class="la la-bar-chart fs-17 mr-2"></i>@Model.Exam.Level</li>
+                </ul>
+            </div>
+        </div><!-- end container -->
+    </div><!-- end quiz-action-nav -->
+</section><!-- end breadcrumb-area -->
+<!-- ================================
+    END BREADCRUMB AREA
+================================= -->
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
+<section class="quiz-ans-wrap pt-60px pb-60px">
+    <div class="container">
+        @for (var index = 0; index < Model.ExamResult.QuestionResults.Count; index++)
+        {
+            var question = Model.ExamResult.QuestionResults[index];
+            <div class="quiz-ans-content mt-10px">
+                <div class="d-flex align-items-center">
+                    <span class="icon-element icon-element-sm mr-2 bg-@(question.Result==true?"5":"1") text-white">@(index+1)</span>
+                    <h3 class="fs-22 font-weight-semi-bold">Question @(index+1) of @Model.ExamResult.QuestionResults.Count</h3>
+                </div>
+                <p class="pt-2">@question.Content</p>
+                <ul class="quiz-result-list pt-4 pl-3">
+                    @for (int answserIndex = 0; answserIndex < question.Answers.Count; answserIndex++)
+                    {
+                        var answer = question.Answers[answserIndex];
+                        if (answer.UserChosen == true)
+                        {
+                            <li class="text-black mb-2">
+                                <span class="icon-element icon-element-xs @(answer.IsCorrect ? "bg-success":"bg-danger") text-white mr-2 border border-gray">
+                                    <i class="la la-check"></i>
+                                </span>
+                                @answer.Content
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="text-black mb-2">
+                                <span class="icon-element icon-element-xs mr-2 @(answer.IsCorrect ? "bg-success":"") border border-gray">
+                                    <span>@(Model.GetCharacterByIndex((answserIndex)))</span>
+                                </span>
+                                @answer.Content
+                            </li>
+                        }
+
+                    }
+                </ul>
+                @if (!string.IsNullOrEmpty(question.Explain))
+                {
+                    <p class="alert alert-info">@question.Explain</p>
+                }
+            </div>
+        }
+    </div><!-- end container -->
+</section>
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
