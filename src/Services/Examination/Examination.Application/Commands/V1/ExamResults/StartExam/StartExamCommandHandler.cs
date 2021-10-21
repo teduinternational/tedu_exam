@@ -35,6 +35,7 @@ namespace Examination.Application.Commands.V1.Exams.StartExam
             var exam = await _examRepository.GetExamByIdAsync(request.ExamId);
             var examResult = new ExamResult(_httpContextAccessor.GetUserId(), request.ExamId);
             examResult.ExamStartDate = DateTime.UtcNow;
+            examResult.ExamTitle = exam.Name;
             if (exam.IsTimeRestricted)
             {
                 var durations = exam.Duration.Split(":");

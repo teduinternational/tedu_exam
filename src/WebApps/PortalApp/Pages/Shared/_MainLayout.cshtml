@@ -1,5 +1,8 @@
-﻿@{ 
+﻿@{
     Layout = "_Layout";
+}
+@section Scripts{
+    @RenderSection("Scripts", required: false)
 }
 <partial name="_Header" />
 @RenderBody()
