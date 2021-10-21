@@ -60,7 +60,6 @@ namespace PortalApp
                     options.Authority = Configuration["IdentityServerConfig:IdentityServerUrl"];
                     options.ClientId = Configuration["IdentityServerConfig:ClientId"];
                     options.ClientSecret = Configuration["IdentityServerConfig:ClientSecret"];
-
                     options.ResponseType = "code";
                     options.RequireHttpsMetadata = false;
                     options.SaveTokens = true;

@@ -123,6 +123,7 @@
         "ClientUri": "https://localhost:6002",
         "AllowedGrantTypes": [ "authorization_code" ],
         "AllowAccessTokensViaBrowser": true,
+        "AlwaysIncludeuserClaimsInIdToken": true,
         "RequirePkce": true,
         "ClientSecrets": [
           {

@@ -32,9 +32,14 @@
 <body>
 
     <partial name="_Preloader" />
-    <partial name="_Header" />
     @RenderBody()
-    <partial name="_Footer" />
+
+    <!-- start scroll top -->
+    <div id="scroll-top">
+        <i class="la la-arrow-up" title="Go top"></i>
+    </div>
+    <!-- end scroll top -->
+
     <!-- template js files -->
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>

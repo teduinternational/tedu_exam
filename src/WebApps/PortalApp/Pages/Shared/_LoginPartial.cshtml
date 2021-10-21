@@ -184,12 +184,12 @@
                         </div>
                         <ul class="cart-dropdown-menu after-none p-0 notification-dropdown-menu">
                             <li class="menu-heading-block d-flex align-items-center">
-                                <a href="teacher-detail.html" class="avatar-sm flex-shrink-0 d-block">
+                                <a href="/profile.html" class="avatar-sm flex-shrink-0 d-block">
                                     <img class="rounded-full img-fluid" src="/images/small-avatar-1.jpg" alt="Avatar image">
                                 </a>
                                 <div class="ml-2">
-                                    <h4><a href="teacher-detail.html" class="text-black">Alex Smith</a></h4>
-                                    <span class="d-block fs-14 lh-20">alexsmith@example.com</span>
+                                    <h4><a href="/profile/dasboard.html" class="text-black">@User.Identity.Name</a></h4>
+                                    <span class="d-block fs-14 lh-20">@User.GetEmail()</span>
                                 </div>
                             </li>
                             <li>
@@ -259,7 +259,7 @@
                                     </li>
                                     <li><div class="section-block"></div></li>
                                     <li>
-                                        <a href="student-detail.html">
+                                        <a href="/profile/dashboard.html">
                                             <i class="la la-user mr-1"></i> Public profile
                                         </a>
                                     </li>
