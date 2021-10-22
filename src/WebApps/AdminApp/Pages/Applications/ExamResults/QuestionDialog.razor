@@ -1,0 +1,54 @@
+﻿@using Examination.Shared.ExamResults;
+@using Examination.Shared.Enums;
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+<MudDialog>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard Elevation="25" Style="height:100%; width:100%">
+                    <MudCardContent Class="px-0">
+                        <MudGrid>
+                            <MudItem xs="12" md="12">
+                                <MudTable Items="@Questions" FixedHeader="true" FixedFooter="false" Height="300px">
+                                    <HeaderContent>
+                                        <MudTh>Content</MudTh>
+                                        <MudTh>Level</MudTh>
+                                        <MudTh>Type</MudTh>
+                                        <MudTh>Result</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Name">@context.Content</MudTd>
+                                        <MudTd DataLabel="Name">@context.Level</MudTd>
+                                        <MudTd DataLabel="Name">@(context.QuestionType == QuestionType.SingleSelection?"Single":"Multiples") </MudTd>
+                                        <MudTd DataLabel="Name">@(context.Result == true ? "Corrected" : "Wrong")</MudTd>
+                                    </RowTemplate>
+                                </MudTable>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="() => Cancel()">Đóng</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    private Error Error { set; get; }
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public List<QuestionResultDto> Questions { get; set; } = new List<QuestionResultDto>();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+} 

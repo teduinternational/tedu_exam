@@ -15,6 +15,10 @@ namespace Examination.Shared.ExamResults
 
         public string UserId { set; get; }
 
+        public string Email { set; get; }
+
+        public string FullName { set; get; }
+
         public List<QuestionResultDto> QuestionResults { get; set; }
 
         public DateTime ExamStartDate { get; set; }

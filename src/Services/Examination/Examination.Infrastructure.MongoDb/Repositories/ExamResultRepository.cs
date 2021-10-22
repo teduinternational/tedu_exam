@@ -38,5 +38,23 @@ namespace Examination.Infrastructure.Repositories
 
             return new PagedList<ExamResult>(items, totalRow, pageIndex, pageSize);
         }
+
+        public async Task<PagedList<ExamResult>> GetExamResultsPagingAsync(string searchKeyword, int pageIndex, int pageSize)
+        {
+            FilterDefinition<ExamResult> filter = Builders<ExamResult>.Filter.Empty;
+            if (!string.IsNullOrEmpty(searchKeyword))
+                filter = Builders<ExamResult>.Filter.Where(s => (s.ExamTitle != null && s.ExamTitle.Contains(searchKeyword))
+                || (s.Email != null && s.Email.Contains(searchKeyword))
+                || (s.FullName != null && s.FullName.Contains(searchKeyword)));
+
+            var totalRow = await Collection.Find(filter).CountDocumentsAsync();
+            var items = await Collection.Find(filter)
+                .SortByDescending(x => x.ExamFinishDate)
+                .Skip((pageIndex - 1) * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+
+            return new PagedList<ExamResult>(items, totalRow, pageIndex, pageSize);
+        }
     }
 }
