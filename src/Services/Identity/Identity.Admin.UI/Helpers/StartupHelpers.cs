@@ -46,6 +46,7 @@ using Identity.Admin.EntityFramework.Configuration.MySql;
 using Identity.Admin.EntityFramework.Configuration.PostgreSQL;
 using Identity.Admin.EntityFramework.Configuration.SqlServer;
 using Identity.Shared.Configuration.Authentication;
+using System.Net.Http;
 
 namespace Identity.Admin.UI.Helpers
 {
@@ -403,6 +404,11 @@ namespace Identity.Admin.UI.Helpers
                             OnMessageReceived = context => OnMessageReceived(context, adminConfiguration),
                             OnRedirectToIdentityProvider = context => OnRedirectToIdentityProvider(context, adminConfiguration)
                         };
+
+                        //Fix bypass SSL connection validate
+                        HttpClientHandler handler = new HttpClientHandler();
+                        handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        options.BackchannelHttpHandler = handler;
                     });
 
             authenticationBuilderAction?.Invoke(authenticationBuilder);

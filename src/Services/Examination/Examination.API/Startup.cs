@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Text.Json;
 using Examination.API.Extensions;
@@ -120,6 +121,11 @@ namespace Examination.API
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
                     ValidateAudience = false
+                };
+                //Fix SSL
+                options.BackchannelHttpHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = delegate { return true; }
                 };
             });
 

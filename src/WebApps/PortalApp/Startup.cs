@@ -64,11 +64,25 @@ namespace PortalApp
                     options.ResponseType = "code";
                     options.RequireHttpsMetadata = false;
                     options.SaveTokens = true;
+
+                    //Fix bypass SSL connection validate
+                    HttpClientHandler handler = new HttpClientHandler();
+                    handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    options.BackchannelHttpHandler = handler;
                 });
             services.AddHttpClient("BackendApi", options =>
             {
                 options.BaseAddress = new Uri(Configuration["BackendApiUrl"]);
-            });
+            })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            }
+                });
             services.RegisterCustomServices();
         }
 
