@@ -21,6 +21,7 @@ namespace PortalApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseIISIntegration();
                 });
     }
 }

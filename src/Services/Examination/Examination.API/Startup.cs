@@ -150,17 +150,14 @@ namespace Examination.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.OAuthClientId("exam_api_swaggerui");
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Examination.API v1");
-                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
-                });
-            }
+                c.OAuthClientId("exam_api_swaggerui");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Examination.API v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
+            });
+
             app.UseErrorWrapping();
             app.UseHttpsRedirection();
             app.UseAuthentication();

@@ -13,6 +13,7 @@ using Identity.Admin.EntityFramework.Shared.Entities.Identity;
 using Identity.Shared.Configuration.Helpers;
 using Identity.Shared.Dtos;
 using Identity.Shared.Dtos.Identity;
+using System.Net;
 
 namespace Identity.Admin
 {

@@ -86,6 +86,7 @@ namespace Identity.Admin.Api
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseIISIntegration();
                 })
                 .UseSerilog((hostContext, loggerConfig) =>
                 {

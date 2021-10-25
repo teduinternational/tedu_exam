@@ -88,6 +88,7 @@ namespace Examination.API
 
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
+                    webBuilder.UseIISIntegration();
                 });
     }
 }
