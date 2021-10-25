@@ -153,14 +153,14 @@ namespace Examination.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.OAuthClientId("exam_api_swaggerui");
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Examination.API v1");
-                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
-                });
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.OAuthClientId("exam_api_swaggerui");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Examination.API v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
+            });
             app.UseErrorWrapping();
             app.UseHttpsRedirection();
             app.UseAuthentication();
@@ -180,21 +180,22 @@ namespace Examination.API
                     Predicate = r => r.Name.Contains("self")
                 });
                 endpoints.MapHealthChecks("/hc-details",
-                            new HealthCheckOptions
-                            {
-                                ResponseWriter = async (context, report) =>
+                    new HealthCheckOptions
+                    {
+                        ResponseWriter = async (context, report) =>
+                        {
+                            var result = JsonSerializer.Serialize(
+                                new
                                 {
-                                    var result = JsonSerializer.Serialize(
-                                        new
-                                        {
-                                            status = report.Status.ToString(),
-                                            monitors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
-                                        });
-                                    context.Response.ContentType = MediaTypeNames.Application.Json;
-                                    await context.Response.WriteAsync(result);
-                                }
-                            }
-                        );
+                                    status = report.Status.ToString(),
+                                    monitors = report.Entries.Select(e => new
+                                    { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status) })
+                                });
+                            context.Response.ContentType = MediaTypeNames.Application.Json;
+                            await context.Response.WriteAsync(result);
+                        }
+                    }
+                );
 
                 endpoints.MapControllers();
             });
