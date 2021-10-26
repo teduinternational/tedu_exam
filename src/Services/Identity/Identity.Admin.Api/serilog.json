@@ -1,0 +1,33 @@
+﻿{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Error",
+      "Override": {
+        "Skoruba": "Information"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console"
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "Logs/identity_api.txt",
+          "rollingInterval": "Day"
+        }
+      },
+      {
+        "Name": "MSSqlServer",
+        "Args": {
+          "connectionString": "Server=.;Database=IdentityDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+          "tableName": "Log",
+          "columnOptionsSection": {
+            "addStandardColumns": [ "LogEvent" ],
+            "removeStandardColumns": [ "Properties" ]
+          }
+        }
+      }
+    ]
+  }
+}

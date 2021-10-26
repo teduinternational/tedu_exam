@@ -1,0 +1,188 @@
+﻿@page "/app/questions/details/{Id}"
+@using Examination.Shared.Questions
+@using Examination.Shared.Categories
+@using Examination.Shared.Enums
+@using Microsoft.Extensions.Logging
+@inject IQuestionService QuestionService
+@inject ICategoryService CategoryService
+@inject ILogger<NewItem> Logger
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">@model.Content</MudText>
+
+<EditForm Model="model" OnValidSubmit="OnValidSubmit">
+    <MudPaper>
+        <MudGrid Style="margin:0">
+            <MudItem xs="6" md="6" sm="12">
+                <DataAnnotationsValidator />
+                <MudTextField Label="Content" Required="true" RequiredError="Content is required"
+                              @bind-Value="model.Content" For="@(() => model.Content)" />
+                <MudText>Level</MudText>
+                <MudRadioGroup @bind-SelectedOption="model.Level" Required="true" RequiredError="Level is required">
+                    <MudRadio Option="Level.Easy" Color="Color.Primary">Easy</MudRadio>
+                    <MudRadio Option="Level.Medium" Color="Color.Warning">Medium</MudRadio>
+                    <MudRadio Option="Level.Difficult" Color="Color.Error">Difficult</MudRadio>
+
+                </MudRadioGroup>
+                <MudText>Type</MudText>
+                <MudRadioGroup @bind-SelectedOption="model.QuestionType" Required="true" RequiredError="Question type is required">
+                    <MudRadio Option="QuestionType.SingleSelection" Color="Color.Primary">Single Choice</MudRadio>
+                    <MudRadio Option="QuestionType.MultipleSelection" Color="Color.Secondary">Multiple Choice</MudRadio>
+                </MudRadioGroup>
+
+                <MudSelect Label="Category" @bind-Value="model.CategoryId" Required="true" RequiredError="Category is required"
+                           OffsetY="true" AdornmentIcon="@Icons.Material.Filled.Category" AdornmentColor="Color.Primary">
+                    @foreach (var item in categories)
+                    {
+                        <MudSelectItem Value="item.Id">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudTextField Label="Explain answer" Required="true" RequiredError="Explain is required"
+                              @bind-Value="model.Explain" For="@(() => model.Explain)" />
+            </MudItem>
+            <MudItem xs="6" md="6" sm="12">
+                <MudText>Answers</MudText>
+                <MudTable Items="@model.Answers" Hover="true" Breakpoint="Breakpoint.Sm"
+                          Loading="@loading" Context="item" LoadingProgressColor="Color.Info">
+                    <HeaderContent>
+                        <MudTh>Content</MudTh>
+                        <MudTh>Correct</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Content">@item.Content</MudTd>
+                        <MudTd DataLabel="Correct">@(item.IsCorrect?"Correct":"")</MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Update" OnClick="async ()=>await OnEdit(item.ClientId)" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Large" Class="ma-2" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async ()=>await OnDelete(item.ClientId)" Variant="Variant.Filled" Color="Color.Error" Size="Size.Large" Class="ma-2" />
+                        </MudTd>
+                    </RowTemplate>
+                    <FooterContent>
+                        <MudButton ButtonType="ButtonType.Button" OnClick="AddAnswer" Variant="Variant.Filled" Color="Color.Success">Create</MudButton>
+                    </FooterContent>
+                </MudTable>
+            </MudItem>
+            <MudItem sm="12">
+                <MudToolBar>
+                    <MudSpacer />
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                               Color="Color.Primary" Class="ml-auto">Lưu Lại</MudButton>
+                </MudToolBar>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</EditForm>
+
+<MudOverlay Visible="loading" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+</MudOverlay>
+@code {
+    bool success;
+    bool loading = false;
+    [Parameter]
+    public string Id { set; get; }
+
+    UpdateQuestionRequest model = new UpdateQuestionRequest();
+    List<CategoryDto> categories = new List<CategoryDto>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var categoryResult = await CategoryService.GetAllCategoriesAsync();
+        var questionResult = await QuestionService.GetQuestionByIdAsync(Id);
+        if (categoryResult.IsSuccessed && questionResult.IsSuccessed)
+        {
+            categories = categoryResult.ResultObj;
+            var question = questionResult.ResultObj;
+            model.Id = question.Id;
+            model.Content = question.Content;
+            model.Level = question.Level;
+            model.QuestionType = question.QuestionType;
+            model.Explain = question.Explain;
+            model.CategoryId = question.CategoryId;
+            model.Answers = question.Answers.ToList();
+        }
+    }
+    private async Task AddAnswer()
+    {
+        var parameters = new DialogParameters
+        {
+            ["Model"] = new AnswerDto(),
+            ["Mode"] = DialogMode.Add
+        };
+
+        var dialog = DialogService.Show<AnswerDialog>("Add Answer", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            model.Answers.Add(result.Data as AnswerDto);
+        }
+    }
+    private async Task OnValidSubmit(EditContext context)
+    {
+        if (model.Answers.Count(x => x.IsCorrect) > 1 && model.QuestionType == QuestionType.SingleSelection)
+        {
+            Snackbar.Add("Single choice question cannot have multiple correct answers.", Severity.Error);
+            return;
+        }
+        loading = true;
+        success = await QuestionService.UpdateAsync(model);
+        if (success)
+        {
+            Snackbar.Add("Create new item success", Severity.Success);
+            NavigationManager.NavigateTo(UrlConstants.Questions);
+        }
+        else
+        {
+            Snackbar.Add("Create action is not success", Severity.Error);
+        }
+        loading = false;
+        StateHasChanged();
+    }
+
+    public async Task OnDelete(Guid clientId)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Do you really want to delete these records? This process cannot be undone.");
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = DialogService.Show<ConfirmationDialog>("Delete", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            model.Answers.RemoveAll(x => x.ClientId == clientId);
+        }
+    }
+
+    private async Task OnEdit(Guid clientId)
+    {
+        var answer = model.Answers.SingleOrDefault(x => x.ClientId == clientId);
+        if (answer == null)
+        {
+            Snackbar.Add("Cannot edit this answer");
+            return;
+        }
+
+        var parameters = new DialogParameters
+        {
+            ["Model"] = answer,
+            ["Mode"] = DialogMode.Edit
+        };
+
+        var dialog = DialogService.Show<AnswerDialog>("Edit Answer", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            var updatedAnswer = result.Data as AnswerDto;
+            answer.Content = updatedAnswer.Content;
+            answer.IsCorrect = updatedAnswer.IsCorrect;
+        }
+    }
+}
