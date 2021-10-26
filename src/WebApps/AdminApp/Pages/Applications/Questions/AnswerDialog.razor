@@ -1,0 +1,54 @@
+﻿@using Examination.Shared.Questions
+@inject ISnackbar Snackbar
+
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Class="mr-3 mb-n1" />
+                @Mode answer
+            </MudText>
+        </TitleContent>
+        <DialogContent>
+
+            <DataAnnotationsValidator />
+            <MudTextField Label="Name" Required="true" RequiredError="Content is required"
+                          @bind-Value="Model.Content" For="@(() => Model.Content)" />
+            <MudCheckBox @bind-Checked="@Model.IsCorrect">Correct</MudCheckBox>
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="Color.Primary" OnClick="() => Cancel()">Đóng</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success">Lưu lại</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+}
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string Mode { set; get; }
+
+    [Parameter] public AnswerDto Model { get; set; } = new AnswerDto();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void OnValidSubmit()
+    {
+        if (Mode == DialogMode.Add)
+        {
+            Model.ClientId = Guid.NewGuid();
+            Snackbar.Add("Answer added", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Answer updated", Severity.Success);
+        }
+        MudDialog.Close(DialogResult.Ok(Model));
+        StateHasChanged();
+    }
+}

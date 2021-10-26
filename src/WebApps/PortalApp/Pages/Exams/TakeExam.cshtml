@@ -1,0 +1,106 @@
+﻿@page "/take-exam.html"
+@model PortalApp.Pages.Exams.TakeExamModel
+@section Scripts{
+    <environment include="Development">
+        <script src="~/pages/exams/take_exam.js" asp-append-version="true"></script>
+        <script>
+            var page = new TakeExamPage();
+            page.init();
+        </script>
+    </environment>
+}
+@if (Model.Exam.IsTimeRestricted)
+{
+    var remainingTime = Model.ExamResult.ExamFinishDate.Value.Subtract(DateTime.UtcNow);
+    <input type="hidden" id="hidRemainingTime" value="@remainingTime.ToString("mm"):@remainingTime.ToString("ss")" />
+}
+<input type="hidden" id="hidIsTimeRestricted" value="@(Model.Exam.IsTimeRestricted ? "1" : "0")" />
+<input type="hidden" id="hidCurrentQuestionIndex" value="0" />
+<input type="hidden" id="hidLastQuestionIndex" value="@(Model.Exam.Questions.Count-1)" />
+<input type="hidden" id="hidExamId" value="@Model.Exam.Id" />
+<input type="hidden" id="hidExamResultId" value="@Model.ExamResult.Id" />
+<input type="hidden" id="hidCurrentQuestionId" value="" />
+<!-- ================================
+    START BREADCRUMB AREA
+================================= -->
+<section class="breadcrumb-area">
+    <div class="bg-white py-3 pattern-bg">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul class="quiz-nav d-flex flex-wrap align-items-center">
+                    <li><a href="course-details.html"><i class="la la-arrow-left mr-2"></i>Back to Exam</a></li>
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <a href="course-details.html">
+                                <img src="/images/angular.png" alt="Angular thumbnail">
+                            </a>
+                            <p>
+                                <a href="course-details.html">@Model.Exam.Name</a><span class="d-block fs-13">Brad Traversy</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div><!-- end breadcrumb-content -->
+        </div><!-- end container -->
+    </div>
+    <div class="bg-dark pt-60px pb-60px">
+        <div class="container">
+            <ul class="quiz-course-nav d-flex align-items-center justify-content-between">
+                @for (int index = 0; index < Model.Exam.Questions.Count; index++)
+                {
+                    <li>
+                        <a href="#" class="icon-element icon-element-sm navigate-question" data-index="@index">
+                            @(index+1)
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div class="breadcrumb-content pt-40px">
+                <div class="section-heading">
+                    <h2 class="section__title text-white fs-30 pb-2">Question <span id="lblCurrentQuestion"></span> of @Model.Exam.NumberOfQuestions</h2>
+                    <p class="section__desc text-white-50" id="lblQuestionContent"></p>
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div>
+    <div class="quiz-action-nav bg-white py-3 shadow-sm">
+        <div class="container">
+            <div class="quiz-action-content d-flex flex-wrap align-items-center justify-content-between">
+                <ul class="quiz-nav d-flex align-items-center">
+                    <li><i class="la la-sliders fs-17 mr-2"></i>Choose the correct answer below</li>
+                </ul>
+                <div class="quiz-nav-btns">
+                    @if (Model.Exam.IsTimeRestricted)
+                    {
+                        <span id="countdown" class="mr-2"></span>
+                    }
+                    <button type="button" id="btnSkipExam" class="btn theme-btn theme-btn-transparent mr-2">Skip Quiz</button>
+                    <button id="btnNextQuestion" type="button" class="btn theme-btn  mr-2">Next Question <i class="la la-angle-right icon ml-1"></i></button>
+                    <button type="button" id="btnFinishExam" style="display:none" class="btn theme-btn-transparent">Finish Exam</button>
+
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div><!-- end quiz-action-nav -->
+</section><!-- end breadcrumb-area -->
+<!-- ================================
+    END BREADCRUMB AREA
+================================= -->
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->
+<section class="quiz-ans-wrap pt-60px pb-60px">
+    <div class="container">
+        <div class="quiz-ans-content">
+            <h3 class="fs-22 font-weight-semi-bold">Your Answer:</h3>
+            <div class="quiz-ans-list py-3" id="divAnswers">
+
+
+            </div><!-- end quiz-ans-list -->
+            <p class="fs-15" id="lblNote"></p>
+        </div>
+    </div><!-- end container -->
+</section>
+<!-- ================================
+       START QUIZ ANS AREA
+================================= -->

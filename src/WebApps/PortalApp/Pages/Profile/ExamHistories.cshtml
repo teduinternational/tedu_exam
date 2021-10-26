@@ -1,0 +1,105 @@
+﻿@page "/exam-histories.html"
+@{
+    Layout = "_ProfileLayout";
+}
+@model PortalApp.Pages.Profile.ExamHistoriesModel
+<div class="dashboard-content-wrap">
+    <div class="dashboard-menu-toggler btn theme-btn theme-btn-sm lh-28 theme-btn-transparent mb-4 ml-3">
+        <i class="la la-bars mr-1"></i> Dashboard Nav
+    </div>
+    <div class="container-fluid">
+        <div class="breadcrumb-content d-flex flex-wrap align-items-center justify-content-between mb-5">
+            <div class="media media-card align-items-center">
+                <div class="media-img media--img media-img-md rounded-full">
+                    <img class="rounded-full" src="images/small-avatar-1.jpg" alt="Student thumbnail image">
+                </div>
+                <div class="media-body">
+                    <h2 class="section__title fs-30">Howdy, Tim Buchalka</h2>
+                    <div class="rating-wrap d-flex align-items-center pt-2">
+                        <div class="review-stars">
+                            <span class="rating-number">4.4</span>
+                            <span class="la la-star"></span>
+                            <span class="la la-star"></span>
+                            <span class="la la-star"></span>
+                            <span class="la la-star"></span>
+                            <span class="la la-star-o"></span>
+                        </div>
+                        <span class="rating-total pl-1">(20,230)</span>
+                    </div><!-- end rating-wrap -->
+                </div><!-- end media-body -->
+            </div><!-- end media -->
+        </div><!-- end breadcrumb-content -->
+        <div class="section-block mb-5"></div>
+        <div class="dashboard-heading mb-5">
+            <h3 class="fs-22 font-weight-semi-bold">Quiz Attempts</h3>
+        </div>
+        <div class="table-responsive pb-4">
+            <table class="table generic-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Exam Title</th>
+                        <th scope="col">Number Of Questions</th>
+                        <th scope="col">Correct Questions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ExamResults.Items)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <ul class="generic-list-item">
+                                    <li>
+                                        @if (item.Passed.HasValue)
+                                        {
+                                            if (item.Passed == true)
+                                            {
+                                                <span class="badge bg-success text-white p-1">Passed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger text-white p-1">Failed</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-white p-1">Aborted</span>
+                                        }
+                                        <span>@(item.ExamFinishDate.HasValue ? @item.ExamFinishDate.Value.ToString("f") : "N/A")</span>
+                                    </li>
+                                    <li>
+                                        <a href="/exam-details.html?id=@item.ExamId" class="text-black">@item.ExamTitle</a>
+                                    </li>
+                                </ul>
+                            </th>
+                            <td>
+                                <ul class="generic-list-item">
+                                    <li>@item.QuestionResults.Count</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="generic-list-item">
+                                    <li>@item.QuestionResults.Count(x => x.Result == true)</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center py-3">
+            <partial name="_Pager" model="Model.ExamResults" />
+        </div>
+        <div class="row align-items-center dashboard-copyright-content pb-4">
+            <div class="col-lg-6">
+                <p class="copy-desc">&copy; 2021 Aduca. All Rights Reserved. by <a href="https://techydevs.com/">TechyDevs</a></p>
+            </div><!-- end col-lg-6 -->
+            <div class="col-lg-6">
+                <ul class="generic-list-item d-flex flex-wrap align-items-center fs-14 justify-content-end">
+                    <li class="mr-3"><a href="terms-and-conditions.html">Terms & Conditions</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                </ul>
+            </div><!-- end col-lg-6 -->
+        </div><!-- end row -->
+    </div><!-- end container-fluid -->
+</div><!-- end dashboard-content-wrap -->
