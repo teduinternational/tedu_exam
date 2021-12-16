@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Examination.Dtos.Categories
+namespace Examination.Shared.Categories
 {
     public class CategoryDto
     {

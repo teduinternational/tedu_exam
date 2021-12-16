@@ -1,11 +1,12 @@
 ﻿using Examination.Shared.Enums;
 using Examination.Shared.Questions;
+using Examination.Shared.SeedWork;
 using MediatR;
 using System.Collections.Generic;
 
 namespace Examination.Application.Commands.V1.Questions.UpdateQuestion
 {
-    public class UpdateQuestionCommand : IRequest<bool>
+    public class UpdateQuestionCommand : IRequest<ApiResult<bool>>
     {
         public string Id { get; set; }
 

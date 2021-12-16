@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Examination.Domain.AggregateModels.QuestionAggregate;
 using Examination.Shared.Questions;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Examination.Application.Commands.V1.Questions.UpdateQuestion
 {
-    public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, bool>
+    public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, ApiResult<bool>>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly ILogger<UpdateQuestionCommandHandler> _logger;
@@ -27,13 +28,13 @@ namespace Examination.Application.Commands.V1.Questions.UpdateQuestion
 
         }
 
-        public async Task<bool> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResult<bool>> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
             var itemToUpdate = await _questionRepository.GetQuestionsByIdAsync(request.Id);
             if (itemToUpdate == null)
             {
                 _logger.LogError($"Item is not found {request.Id}");
-                return false;
+                return new ApiErrorResult<bool>("Item not found");
             }
 
             itemToUpdate.Content = request.Content;
@@ -57,7 +58,7 @@ namespace Examination.Application.Commands.V1.Questions.UpdateQuestion
                 throw;
             }
 
-            return true;
+            return new ApiSuccessResult<bool>(true);
         }
     }
 }

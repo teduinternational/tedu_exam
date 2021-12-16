@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Examination.Application.Queries.V1.Categories.GetAllCategories;
 using Examination.Domain.AggregateModels.CategoryAggregate;
 using Examination.Dtos.SeedWork;
 using Examination.Shared.Categories;
@@ -15,38 +16,34 @@ using System.Threading.Tasks;
 
 namespace Examination.Application.Queries.V1.Categories.GetCategoriesPaging
 {
-    public class GetCategoriesPagingQueryHandler : IRequestHandler<GetCategoriesPagingQuery, ApiResult<PagedList<CategoryDto>>>
+    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, ApiResult<List<CategoryDto>>>
     {
 
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IClientSessionHandle _clientSessionHandle;
         private readonly IMapper _mapper;
         private readonly ILogger<GetCategoriesPagingQueryHandler> _logger;
 
-        public GetCategoriesPagingQueryHandler(
+        public GetAllCategoriesQueryHandler(
                 ICategoryRepository categoryRepository,
                 IMapper mapper,
-                ILogger<GetCategoriesPagingQueryHandler> logger,
-                IClientSessionHandle clientSessionHandle
+                ILogger<GetCategoriesPagingQueryHandler> logger
             )
         {
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
-            _clientSessionHandle = clientSessionHandle ?? throw new ArgumentNullException(nameof(_clientSessionHandle));
             _mapper = mapper;
             _logger = logger;
 
         }
 
-        public async Task<ApiResult<PagedList<CategoryDto>>> Handle(GetCategoriesPagingQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<List<CategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetHomeExamListQueryHandler");
 
-            var result = await _categoryRepository.GetCategoriesPagingAsync(request.SearchKeyword, request.PageIndex, request.PageSize);
-            var items = _mapper.Map<List<CategoryDto>>(result.Items);
+            var result = await _categoryRepository.GetAllCategoriesAsync();
+            var items = _mapper.Map<List<CategoryDto>>(result);
 
             _logger.LogInformation("END: GetHomeExamListQueryHandler");
-            var pagedResult= new PagedList<CategoryDto>(items, result.MetaData.TotalCount, request.PageIndex, request.PageSize);
-            return new ApiSuccessResult<PagedList<CategoryDto>>(pagedResult);
+            return new ApiSuccessResult<List<CategoryDto>>(items);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Examination.Dtos.Categories;
-using Examination.Dtos.SeedWork;
+﻿using Examination.Dtos.SeedWork;
+using Examination.Shared.Categories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,7 @@ namespace AdminApp.Services.Interfaces
         Task<bool> CreateAsync(CreateCategoryRequest request);
         Task<bool> UpdateAsync(UpdateCategoryRequest request);
         Task<bool> DeleteAsync(string id);
+        Task<List<CategoryDto>> GetAllCategoriesAsync();
+
     }
 }

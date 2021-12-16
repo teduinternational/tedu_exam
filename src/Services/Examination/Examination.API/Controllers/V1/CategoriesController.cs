@@ -1,13 +1,16 @@
 ﻿using Examination.Application.Commands.V1.Categories.CreateCategory;
 using Examination.Application.Commands.V1.Categories.DeleteCategory;
 using Examination.Application.Commands.V1.Categories.UpdateCategory;
+using Examination.Application.Queries.V1.Categories.GetAllCategories;
 using Examination.Application.Queries.V1.Categories.GetCategoriesPaging;
 using Examination.Application.Queries.V1.Categories.GetCategoryById;
-using Examination.Dtos.Categories;
 using Examination.Dtos.SeedWork;
+using Examination.Shared.Categories;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -18,36 +21,37 @@ namespace Examination.API.Controllers.V1
         private readonly IMediator _mediator;
         private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(IMediator mediator, ILogger<CategoriesController> logger)
+        public CategoriesController(IMediator mediator, 
+            ILogger<CategoriesController> logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(PagedList<CategoryDto>), (int)HttpStatusCode.OK)]
+        [HttpGet("paging")]
+        [ProducesResponseType(typeof(ApiSuccessResult<PagedList<CategoryDto>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetCategoriesPagingAsync([FromQuery] GetCategoriesPagingQuery query)
         {
             _logger.LogInformation("BEGIN: GetCategoriesPagingAsync");
 
-            var queryResult = await _mediator.Send(query);
+            var result = await _mediator.Send(query);
 
             _logger.LogInformation("END: GetCategoriesPagingAsync");
 
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiSuccessResult<CategoryDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCategoriesByIdAsync(string id)
         {
             _logger.LogInformation("BEGIN: GetCategoriesByIdAsync");
 
-            var queryResult = await _mediator.Send(new GetCategoryByIdQuery(id));
+            var result = await _mediator.Send(new GetCategoryByIdQuery(id));
 
             _logger.LogInformation("END: GetCategoriesByIdAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -57,15 +61,16 @@ namespace Examination.API.Controllers.V1
         {
             _logger.LogInformation("BEGIN: UpdateCategoryAsync");
 
-            var queryResult = await _mediator.Send(new UpdateCategoryCommand()
-            {
-                Id = request.Id,
-                Name = request.Name,
-                UrlPath = request.UrlPath
-            });
+            var result = await _mediator.Send(
+                new UpdateCategoryCommand()
+                {
+                    Id = request.Id,
+                    Name = request.Name,
+                    UrlPath = request.UrlPath
+                });
 
             _logger.LogInformation("END: UpdateCategoryAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -75,16 +80,13 @@ namespace Examination.API.Controllers.V1
         {
             _logger.LogInformation("BEGIN: CreateCategoryAsync");
 
-            var queryResult = await _mediator.Send(new CreateCategoryCommand()
+            var result = await _mediator.Send(new CreateCategoryCommand()
             {
                 Name = request.Name,
                 UrlPath = request.UrlPath
             });
-            if (queryResult == null)
-                return BadRequest();
-
             _logger.LogInformation("END: CreateCategoryAsync");
-            return Ok(queryResult);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -92,12 +94,25 @@ namespace Examination.API.Controllers.V1
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteCategoryAsync(string id)
         {
-            _logger.LogInformation("BEGIN: GetExamList");
+            _logger.LogInformation("BEGIN: DeleteCategoryAsync");
 
-            var queryResult = await _mediator.Send(new DeleteCategoryCommand(id));
+            var result = await _mediator.Send(new DeleteCategoryCommand(id));
 
-            _logger.LogInformation("END: GetExamList");
-            return Ok(queryResult);
+            _logger.LogInformation("END: DeleteCategoryAsync");
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiSuccessResult<List<CategoryDto>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllCategoriesAsync()
+        {
+            _logger.LogInformation("BEGIN: GetAllCategoriesAsync");
+
+            var result = await _mediator.Send(new GetAllCategoriesQuery());
+
+            _logger.LogInformation("END: GetAllCategoriesAsync");
+
+            return Ok(result);
         }
     }
 }

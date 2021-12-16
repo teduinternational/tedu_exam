@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Examination.Domain.AggregateModels.CategoryAggregate;
-using Examination.Dtos.Categories;
+using Examination.Shared.Categories;
+using Examination.Shared.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Examination.Application.Queries.V1.Categories.GetCategoryById
 {
-    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryDto>
+    public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, ApiResult<CategoryDto>>
     {
 
         private readonly ICategoryRepository _categoryRepository;
@@ -32,7 +33,7 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoryById
 
         }
 
-        public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<CategoryDto>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("BEGIN: GetCategoryByIdQueryHandler");
 
@@ -41,7 +42,7 @@ namespace Examination.Application.Queries.V1.Categories.GetCategoryById
 
             _logger.LogInformation("END: GetCategoryByIdQueryHandler");
 
-            return item;
+            return new ApiSuccessResult<CategoryDto>(item);
         }
     }
 }

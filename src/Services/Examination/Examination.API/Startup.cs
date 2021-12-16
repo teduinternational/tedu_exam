@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Text.Json;
+using Examination.API.Extensions;
 using Examination.API.Filters;
 using Examination.Application.Commands.V1.Exams.StartExam;
 using Examination.Application.Mapping;
@@ -65,7 +66,7 @@ namespace Examination.API
             {
                 return new MongoClient(mongodbConnectionString);
             });
-
+            services.AddHttpContextAccessor();
             services.AddScoped(c => c.GetService<IMongoClient>()?.StartSession());
             services.AddAutoMapper(cfg => { cfg.AddProfile(new MappingProfile()); });
             services.AddMediatR(typeof(StartExamCommandHandler).Assembly);
@@ -162,7 +163,7 @@ namespace Examination.API
                     c.SwaggerEndpoint("/swagger/v2/swagger.json", "Examination.API v2");
                 });
             }
-
+            app.UseErrorWrapping();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();

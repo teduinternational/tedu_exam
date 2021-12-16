@@ -1,5 +1,7 @@
 ﻿using Examination.Domain.AggregateModels.CategoryAggregate;
+using Examination.Dtos.SeedWork;
 using Examination.Infrastructure.SeedWork;
+using Examination.Shared.Categories;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -13,10 +15,17 @@ namespace Examination.Infrastructure.Repositories
     {
         public CategoryRepository(
           IMongoClient mongoClient,
-          IOptions<ExamSettings> settings,
-          IMediator mediator)
+          IOptions<ExamSettings> settings)
       : base(mongoClient, settings, Constants.Collections.Category)
         {
+        }
+
+        public async Task<List<Category>> GetAllCategoriesAsync()
+        {
+            var items = await Collection.AsQueryable()
+                .ToListAsync();
+
+            return items;
         }
 
         public async Task<Category> GetCategoriesByIdAsync(string id)
@@ -31,7 +40,7 @@ namespace Examination.Infrastructure.Repositories
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Tuple<List<Category>, long>> GetCategoriesPagingAsync(string searchKeyword, int pageIndex, int pageSize)
+        public async Task<PagedList<Category>> GetCategoriesPagingAsync(string searchKeyword, int pageIndex, int pageSize)
         {
             FilterDefinition<Category> filter = Builders<Category>.Filter.Empty;
             if (!string.IsNullOrEmpty(searchKeyword))
@@ -43,7 +52,7 @@ namespace Examination.Infrastructure.Repositories
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new Tuple<List<Category>, long>(items, totalRow);
+            return new PagedList<Category>(items, totalRow,pageIndex,pageSize);
         }
     }
 }
