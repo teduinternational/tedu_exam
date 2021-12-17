@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Version>2.0.1</Version>
         <Authors>Jan Škoruba</Authors>
         <Description>The package with UI for the administration of the IdentityServer4</Description>
@@ -97,10 +97,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.5" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="6.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="5.0.1" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="5.0.1" />
